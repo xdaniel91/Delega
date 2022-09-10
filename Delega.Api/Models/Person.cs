@@ -18,7 +18,7 @@
             }
         }
 
-        protected Person()
+        public Person()
         {
             //empty constructor for entityframework.
         }

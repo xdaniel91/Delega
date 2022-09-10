@@ -4,25 +4,29 @@ using Delega.Api.Interfaces.Services;
 using Delega.Api.Repositories.Implementation;
 using Delega.Api.Services.Implementation;
 using Microsoft.EntityFrameworkCore;
+using FluentMigrator.Runner;
+using Delega.Api.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+var ServiceProvider = CreateServices(builder);
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DelegaContext>((DbContextOptionsBuilder options) => options
-.UseLazyLoadingProxies()
-.UseNpgsql(builder.Configuration.GetConnectionString("delega")));
+builder.Services.AddDbContext<DelegaContext>(
+options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega")));
+
+using var scope = ServiceProvider.CreateScope();
+UpdateDatabase(scope.ServiceProvider);
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -36,3 +40,24 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+static void UpdateDatabase(IServiceProvider serviceProvider)
+{
+    // Instantiate the runner
+    var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
+
+    // Execute the migrations
+    runner.MigrateUp();
+}
+
+static IServiceProvider CreateServices(WebApplicationBuilder builder)
+{
+    return new ServiceCollection()
+        .AddFluentMigratorCore()
+    .ConfigureRunner(rb => rb.AddPostgres()
+    .WithGlobalConnectionString(builder.Configuration.GetConnectionString("delega"))
+    .ScanIn(typeof(AddPersonTable).Assembly).For.Migrations())
+    .AddLogging(lb => lb.AddFluentMigratorConsole())
+    .BuildServiceProvider(false);
+}

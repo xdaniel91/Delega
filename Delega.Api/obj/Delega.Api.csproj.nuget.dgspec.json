@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DanielRodriguesCarva\\source\\repos\\Delega\\Delega.Api\\Delega.Api.csproj": {}
+    "C:\\Users\\xdani\\source\\repos\\Delega\\Delega.Api\\Delega.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DanielRodriguesCarva\\source\\repos\\Delega\\Delega.Api\\Delega.Api.csproj": {
+    "C:\\Users\\xdani\\source\\repos\\Delega\\Delega.Api\\Delega.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DanielRodriguesCarva\\source\\repos\\Delega\\Delega.Api\\Delega.Api.csproj",
+        "projectUniqueName": "C:\\Users\\xdani\\source\\repos\\Delega\\Delega.Api\\Delega.Api.csproj",
         "projectName": "Delega.Api",
-        "projectPath": "C:\\Users\\DanielRodriguesCarva\\source\\repos\\Delega\\Delega.Api\\Delega.Api.csproj",
-        "packagesPath": "C:\\Users\\DanielRodriguesCarva\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DanielRodriguesCarva\\source\\repos\\Delega\\Delega.Api\\obj\\",
+        "projectPath": "C:\\Users\\xdani\\source\\repos\\Delega\\Delega.Api\\Delega.Api.csproj",
+        "packagesPath": "C:\\Users\\xdani\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\xdani\\source\\repos\\Delega\\Delega.Api\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\DanielRodriguesCarva\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\xdani\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -44,6 +40,18 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "FluentMigrator": {
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
+            "FluentMigrator.Runner": {
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
+            "FluentMigrator.Runner.Postgres": {
+              "target": "Package",
+              "version": "[3.3.2, )"
+            },
             "FluentValidation.AspNetCore": {
               "target": "Package",
               "version": "[11.2.2, )"
@@ -89,7 +97,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.108\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }
