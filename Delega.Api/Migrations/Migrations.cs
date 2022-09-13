@@ -22,3 +22,22 @@ public class AddPersonTable : Migration
         .WithColumn("updatedtime").AsTime().Nullable();
     }
 }
+
+[Migration(202209120936)]
+public class AddLawyerTable : Migration
+{
+    public override void Down()
+    {
+
+    }
+
+    public override void Up()
+    {
+        Create.Table("lawyer")
+            .WithColumn("id").AsInt64().PrimaryKey().Identity().NotNullable()
+            .WithColumn("personid").AsInt64().ForeignKey("person", "id").NotNullable()
+            .WithColumn("oab").AsString().NotNullable()
+            .WithColumn("createdtime").AsDateTime().WithDefaultValue(DateTime.UtcNow)
+            .WithColumn("updatedtime").AsTime().Nullable();
+    }
+}

@@ -29,12 +29,12 @@ public class PersonRepository : IPersonRepository
 
     public IEnumerable<Person> GetAll()
     {
-        return DbSet;
+        return DbSet.AsNoTracking();
     }
 
     public Person GetById(int id)
     {
-        return DbSet.FirstOrDefault(x => x.Id.Equals(id));
+        return DbSet.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id));
     }
 
     public Person Update(Person person)

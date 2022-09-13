@@ -17,8 +17,13 @@ options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega")
 using var scope = ServiceProvider.CreateScope();
 UpdateDatabase(scope.ServiceProvider);
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
+
+builder.Services.AddScoped<ILawyerService, LawyerService>();
+builder.Services.AddScoped<ILawyerRepository, LawyerRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -57,7 +62,8 @@ static IServiceProvider CreateServices(WebApplicationBuilder builder)
         .AddFluentMigratorCore()
     .ConfigureRunner(rb => rb.AddPostgres()
     .WithGlobalConnectionString(builder.Configuration.GetConnectionString("delega"))
-    .ScanIn(typeof(AddPersonTable).Assembly).For.Migrations())
+    .ScanIn(typeof(AddPersonTable).Assembly).For.Migrations()
+    .ScanIn(typeof(AddLawyerTable).Assembly).For.Migrations())
     .AddLogging(lb => lb.AddFluentMigratorConsole())
     .BuildServiceProvider(false);
 }

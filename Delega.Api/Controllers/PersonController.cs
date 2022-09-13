@@ -50,15 +50,4 @@ public class PersonController : ControllerBase
             throw;
         }
     }
-
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
-    {
-    }
-
-    [HttpDelete("{id}")]
-    public void Delete(int id)
-    {
-
-    }
 }
