@@ -37,7 +37,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] Person person)
+    public IActionResult Post([FromBody] PersonCreateRequest person)
     {
         try
         {

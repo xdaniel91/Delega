@@ -17,10 +17,19 @@ public class PersonService : IPersonService
         this.uow = uow;
     }
 
-    public Person Add(Person person)
+    public Person Add(PersonCreateRequest personRequest)
     {
         try
         {
+            var person = new Person
+            {
+                Cpf = personRequest.Cpf,
+                CreatedTime = DateTime.Now,
+                BirthDate = personRequest.BirthDate,
+                FirstName = personRequest.FirstName,
+                LastName = personRequest.LastName,
+            };
+
             var entity = repository.Add(person);
             var result = uow.Commit();
 

@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using FluentMigrator.Runner;
 using Delega.Api.Migrations;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 var ServiceProvider = CreateServices(builder);
 
@@ -17,7 +19,7 @@ options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega")
 using var scope = ServiceProvider.CreateScope();
 UpdateDatabase(scope.ServiceProvider);
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
