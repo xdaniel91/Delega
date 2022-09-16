@@ -6,6 +6,8 @@ using Delega.Api.Services.Implementation;
 using Microsoft.EntityFrameworkCore;
 using FluentMigrator.Runner;
 using Delega.Api.Migrations;
+using Delega.Api.Utils;
+using Delega.Api.Interfaces;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -16,11 +18,15 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DelegaContext>(
 options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega")));
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+});
+
 using var scope = ServiceProvider.CreateScope();
 UpdateDatabase(scope.ServiceProvider);
 
-
-
+builder.Services.AddScoped<IConsMessages, ConstMessages>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 

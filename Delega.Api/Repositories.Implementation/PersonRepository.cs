@@ -9,11 +9,11 @@ public class PersonRepository : IPersonRepository
 {
     private readonly DelegaContext Context;
     private readonly DbSet<Person> DbSet;
-
+    
     public PersonRepository(DelegaContext context)
     {
         Context = context;
-        DbSet = this.Context.person;
+        DbSet = this.Context.person;    
     }
 
     public Person Add(Person person)
@@ -42,4 +42,6 @@ public class PersonRepository : IPersonRepository
         var entry = DbSet.Update(person);
         return entry.Entity;
     }
+
+
 }

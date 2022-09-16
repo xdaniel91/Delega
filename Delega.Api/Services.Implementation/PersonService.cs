@@ -1,8 +1,11 @@
 ﻿using Delega.Api.Database;
+using Delega.Api.Interfaces;
 using Delega.Api.Interfaces.Repositories;
 using Delega.Api.Interfaces.Services;
 using Delega.Api.Models;
+using Delega.Api.Validators;
 using Delega.Api.ViewModels;
+using FluentValidation;
 
 namespace Delega.Api.Services.Implementation;
 
@@ -10,35 +13,53 @@ public class PersonService : IPersonService
 {
     private readonly IPersonRepository repository;
     private readonly IUnitOfWork uow;
+    private readonly PersonValidator Validator;
+    private readonly Dictionary<string, string> Messages;
+    private readonly IConsMessages ConsMessages;
 
-    public PersonService(IPersonRepository repository, IUnitOfWork uow)
+    public PersonService(IPersonRepository repository, IUnitOfWork uow, IConsMessages messages)
     {
         this.repository = repository;
         this.uow = uow;
+        messages.SetMessages();
+        Messages = messages.GetMessages();
+        ConsMessages = messages;
+        Validator = new PersonValidator(Messages);
+        var language = Thread.CurrentThread.CurrentCulture.Name;
     }
 
     public Person Add(PersonCreateRequest personRequest)
     {
+
+        var person = new Person
+        {
+            Cpf = personRequest.Cpf,
+            CreatedTime = DateTime.Now,
+            BirthDate = personRequest.BirthDate,
+            FirstName = personRequest.FirstName,
+            LastName = personRequest.LastName,
+        };
+
+        var validationResult = Validator.Validate(person);
+
+        if (!validationResult.IsValid)
+        {
+            var erros = validationResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
+            var errosString = string.Join(",", erros);
+            throw new ValidationException($"Informações inconsistentes.{Environment.NewLine}{errosString}");
+        }
+
         try
         {
-            var person = new Person
-            {
-                Cpf = personRequest.Cpf,
-                CreatedTime = DateTime.Now,
-                BirthDate = personRequest.BirthDate,
-                FirstName = personRequest.FirstName,
-                LastName = personRequest.LastName,
-            };
-
             var entity = repository.Add(person);
             var result = uow.Commit();
-
-            if (result is false)
-                throw new Exception("Perosn cannot be inclued.");
-
             return entity;
         }
-        catch (Exception) { throw; }
+        catch (Exception)
+        {
+
+            throw;
+        }
     }
 
     public void Delete(int id)
