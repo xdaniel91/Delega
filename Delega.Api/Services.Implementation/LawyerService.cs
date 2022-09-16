@@ -25,7 +25,6 @@ namespace Delega.Api.Services.Implementation
 
             var lawyer = new Lawyer
             {
-                Person = personRepository.GetById(lawyerCreateRequest.PersonId),
                 Oab = lawyerCreateRequest.Oab,
                 PersonId = lawyerCreateRequest.PersonId
             };
