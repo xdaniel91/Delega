@@ -14,10 +14,33 @@ namespace Delega.Api.Utils
             DistributedCache = distributedCache;
         }
 
-        public void SetMessages()
+        public void SetMessages(string language)
         {
             var key = "errorMessages";
-            var messages = ConsMessagesSysId.Messages();
+            var languageLower = language.ToLower();
+
+            Dictionary<string, string> messages;
+
+            switch (languageLower)
+            {
+                case "pt-br":
+                    messages = ConsMessagesSysId.MessagesPortugues();
+                    break;
+
+                case "en-us":
+                    messages = ConsMessagesSysId.MessagesEnglish();
+                    break;
+
+                case "es-es":
+                    messages = ConsMessagesSysId.MessagesSpanish();
+                    break;
+
+                default:
+                    throw new Exception("Language not supported.");
+
+            }
+
+
             var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(DateTime.Now.AddMinutes(80))
             .SetSlidingExpiration(TimeSpan.FromMinutes(2));
 
@@ -53,7 +76,35 @@ namespace Delega.Api.Utils
         public static string CpfNotEmptySysid => "6d20d280-ab4e-47b9-9455-711dfd555e0c";
         #endregion
 
-        public static Dictionary<string, string> Messages()
+        public static Dictionary<string, string> MessagesPortugues()
+        {
+            return new Dictionary<string, string>
+            {
+                { FirstNameNotEmptySysid, "Nome não pode ser vazio."},
+                { FirstNameNotNullSysid, "Nome não pode ser nulo." },
+                { FirstNameMinimiumLengthSysid, "Nome deve ter pelo menos 3 letras." },
+                { LastNameNotEmptySysid, "Sobrenome não pode ser vazio." },
+                { LastNameNotNullSysid, "Sobrenome não pode ser nulo." },
+                { LastNameMinimiumLengthSysid, "Sobrenome deve ter pelo menos 3 letras." },
+                { CpfNotEmptySysid, "Cpf não pode ser vazio." },
+            };
+        }
+
+        public static Dictionary<string, string> MessagesEnglish()
+        {
+            return new Dictionary<string, string>
+            {
+                { FirstNameNotEmptySysid, "Nome não pode ser vazio."},
+                { FirstNameNotNullSysid, "Nome não pode ser nulo." },
+                { FirstNameMinimiumLengthSysid, "Nome deve ter pelo menos 3 letras." },
+                { LastNameNotEmptySysid, "Sobrenome não pode ser vazio." },
+                { LastNameNotNullSysid, "Sobrenome não pode ser nulo." },
+                { LastNameMinimiumLengthSysid, "Sobrenome deve ter pelo menos 3 letras." },
+                { CpfNotEmptySysid, "Cpf não pode ser vazio." },
+            };
+        }
+
+        public static Dictionary<string, string> MessagesSpanish()
         {
             return new Dictionary<string, string>
             {

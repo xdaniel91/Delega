@@ -2,7 +2,7 @@
 {
     public interface IConsMessages
     {
-        void SetMessages();
+        void SetMessages(string language);
         Dictionary<string, string> GetMessages();
 
     }

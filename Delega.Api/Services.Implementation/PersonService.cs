@@ -21,11 +21,12 @@ public class PersonService : IPersonService
     {
         this.repository = repository;
         this.uow = uow;
-        messages.SetMessages();
+        var language = Thread.CurrentThread.CurrentCulture.Name;
+        messages.SetMessages(language);
         Messages = messages.GetMessages();
         ConsMessages = messages;
         Validator = new PersonValidator(Messages);
-        var language = Thread.CurrentThread.CurrentCulture.Name;
+        
     }
 
     public Person Add(PersonCreateRequest personRequest)
