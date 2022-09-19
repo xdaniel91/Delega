@@ -12,9 +12,9 @@ namespace Delega.Api.Models
         public string Reason { get; set; }
         public string? Verdict { get; set; }
         public string Status { get; set; }
-        public string TreatedStatus 
-        { 
-            get 
+        public string TreatedStatus
+        {
+            get
             {
                 return Status switch
                 {
@@ -23,7 +23,11 @@ namespace Delega.Api.Models
                     "2" => ConsGeneral.JudicialProcessStatusFinished.Description,
                     _ => string.Empty
                 };
-            } 
+            }
         }
+
+        public DateTime DateHourCreated { get; set; }
+        public DateTime? DateHourInProgress { get; set; }
+        public DateTime? DateHourFinished { get; set; }
     }
 }

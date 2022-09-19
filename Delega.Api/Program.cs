@@ -16,11 +16,11 @@ var ServiceProvider = CreateServices(builder);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DelegaContext>(
-options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega")));
+options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega.postgres")));
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "localhost:6379";
+    options.Configuration = builder.Configuration.GetConnectionString("delega.redis");
 });
 
 using var scope = ServiceProvider.CreateScope();
