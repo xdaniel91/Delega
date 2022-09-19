@@ -3,8 +3,6 @@ using Delega.Api.Interfaces.Services;
 using Delega.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace Delega.Api.Controllers;
 
