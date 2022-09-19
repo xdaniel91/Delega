@@ -6,6 +6,7 @@ using Delega.Api.Models;
 using Delega.Api.Validators;
 using Delega.Api.ViewModels;
 using FluentValidation;
+using System.Globalization;
 
 namespace Delega.Api.Services.Implementation;
 
@@ -21,8 +22,9 @@ public class PersonService : IPersonService
     {
         this.repository = repository;
         this.uow = uow;
-        var language = Thread.CurrentThread.CurrentCulture.Name;
-        messages.SetMessages(language);
+        //var language = Thread.CurrentThread.CurrentCulture.Name;
+        var language = CultureInfo.CreateSpecificCulture("en-US");
+        messages.SetMessages(language.Name);
         Messages = messages.GetMessages();
         ConsMessages = messages;
         Validator = new PersonValidator(Messages);

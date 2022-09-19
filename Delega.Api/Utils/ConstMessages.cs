@@ -94,13 +94,13 @@ namespace Delega.Api.Utils
         {
             return new Dictionary<string, string>
             {
-                { FirstNameNotEmptySysid, "Nome não pode ser vazio."},
-                { FirstNameNotNullSysid, "Nome não pode ser nulo." },
-                { FirstNameMinimiumLengthSysid, "Nome deve ter pelo menos 3 letras." },
-                { LastNameNotEmptySysid, "Sobrenome não pode ser vazio." },
-                { LastNameNotNullSysid, "Sobrenome não pode ser nulo." },
-                { LastNameMinimiumLengthSysid, "Sobrenome deve ter pelo menos 3 letras." },
-                { CpfNotEmptySysid, "Cpf não pode ser vazio." },
+                { FirstNameNotEmptySysid, "Name cannot be empty."},
+                { FirstNameNotNullSysid, "Name cannot be null." },
+                { FirstNameMinimiumLengthSysid, "Name must be at least 3 letters long." },
+                { LastNameNotEmptySysid, "Last name cannot be empty." },
+                { LastNameNotNullSysid, "Last name cannot be null." },
+                { LastNameMinimiumLengthSysid, "Last name must be at least 3 letters long." },
+                { CpfNotEmptySysid, "Cpf cannot be empty." },
             };
         }
 
@@ -108,13 +108,13 @@ namespace Delega.Api.Utils
         {
             return new Dictionary<string, string>
             {
-                { FirstNameNotEmptySysid, "Nome não pode ser vazio."},
-                { FirstNameNotNullSysid, "Nome não pode ser nulo." },
-                { FirstNameMinimiumLengthSysid, "Nome deve ter pelo menos 3 letras." },
-                { LastNameNotEmptySysid, "Sobrenome não pode ser vazio." },
-                { LastNameNotNullSysid, "Sobrenome não pode ser nulo." },
-                { LastNameMinimiumLengthSysid, "Sobrenome deve ter pelo menos 3 letras." },
-                { CpfNotEmptySysid, "Cpf não pode ser vazio." },
+                { FirstNameNotEmptySysid, "El nombre no puede estar vacío."},
+                { FirstNameNotNullSysid, "El nombre no puede ser nulo." },
+                { FirstNameMinimiumLengthSysid, "El nombre debe tener al menos 3 letras." },
+                { LastNameNotEmptySysid, "El apellido no puede estar vacío." },
+                { LastNameNotNullSysid, "El apellido no puede ser nulo." },
+                { LastNameMinimiumLengthSysid, "El apellido debe tener al menos 3 letras." },
+                { CpfNotEmptySysid, "Cpf no puede estar vacío." },
             };
         }
 
