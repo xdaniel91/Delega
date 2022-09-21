@@ -30,6 +30,9 @@ builder.Services.AddScoped<IConsMessages, ConstMessages>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 
+builder.Services.AddScoped<IJudicialProcessService, JudicialProcessService>();
+builder.Services.AddScoped<IJudicialProcessRepository, JudicialProcessRepository>();
+
 builder.Services.AddScoped<ILawyerService, LawyerService>();
 builder.Services.AddScoped<ILawyerRepository, LawyerRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
@@ -69,9 +72,12 @@ static IServiceProvider CreateServices(WebApplicationBuilder builder)
     return new ServiceCollection()
         .AddFluentMigratorCore()
     .ConfigureRunner(rb => rb.AddPostgres()
-    .WithGlobalConnectionString(builder.Configuration.GetConnectionString("delega"))
+    .WithGlobalConnectionString(builder.Configuration.GetConnectionString("delega.postgres"))
     .ScanIn(typeof(AddPersonTable).Assembly).For.Migrations()
-    .ScanIn(typeof(AddLawyerTable).Assembly).For.Migrations())
+    .ScanIn(typeof(AddLawyerTable).Assembly).For.Migrations()
+    .ScanIn(typeof(AddAuthorTable).Assembly).For.Migrations()
+    .ScanIn(typeof(AddAccusedTable).Assembly).For.Migrations()
+    )
     .AddLogging(lb => lb.AddFluentMigratorConsole())
     .BuildServiceProvider(false);
 }

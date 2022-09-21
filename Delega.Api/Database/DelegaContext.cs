@@ -9,6 +9,9 @@ namespace Delega.Api.Database
     {
         public DbSet<Person> person { get; set; }
         public DbSet<Lawyer> lawyer { get; set; }
+        public DbSet<Author> author { get; set; }
+        public DbSet<Accused> accused { get; set; }
+        public DbSet<JudicialProcess> judicialprocesses { get; set; }
         public DelegaContext(DbContextOptions<DelegaContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)

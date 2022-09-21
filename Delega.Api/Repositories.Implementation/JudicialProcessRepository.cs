@@ -1,7 +1,7 @@
 ﻿using Delega.Api.Database;
+using Delega.Api.Interfaces.Repositories;
 using Delega.Api.Models;
 using Delega.Api.Models.ViewModels;
-using Delega.Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Delega.Api.Repositories.Implementation
@@ -14,7 +14,7 @@ namespace Delega.Api.Repositories.Implementation
         public JudicialProcessRepository(DelegaContext context)
         {
             Context = context;
-            //DbSet = Context.judicialprocess;
+            DbSet = Context.judicialprocesses;
         }
 
         public JudicialProcess Add(JudicialProcess JudicialProcess)

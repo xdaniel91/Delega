@@ -6,8 +6,15 @@
         public string Description { get; set; }
     }
 
-    public static class ConsGeneral
+    public static class ConstGeneral
     {
+        public enum StatusJudicialProcess
+        {
+            Created = 0,
+            InProgress = 1,
+            Finished = 2
+        }
+
         public static readonly DelegaConst JudicialProcessStatusCreated = new()
         {
             Sysid = "Created",

@@ -1,9 +1,8 @@
 ﻿using Delega.Api.Models;
-using Delega.Api.Models.Requests;
 using Delega.Api.Models.ViewModels;
 
-namespace Delega.Api.Repositories.Interfaces
-{
+namespace Delega.Api.Interfaces.Repositories;
+
     public interface IJudicialProcessRepository
     {
         JudicialProcess Add(JudicialProcess JudicialProcess);
@@ -11,4 +10,4 @@ namespace Delega.Api.Repositories.Interfaces
         IEnumerable<JudicialProcess> GetAllWithRelationships();
         IEnumerable<JudicialProcessViewModel> GetAll();
     }
-}
+

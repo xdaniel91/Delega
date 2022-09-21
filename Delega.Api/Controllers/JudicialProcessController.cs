@@ -1,5 +1,5 @@
-﻿using Delega.Api.Models.Requests;
-using Delega.Api.Services.Interfaces;
+﻿using Delega.Api.Interfaces.Services;
+using Delega.Api.Models.Requests;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 

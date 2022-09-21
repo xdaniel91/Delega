@@ -1,7 +1,7 @@
 ﻿using Delega.Api.Models;
 
-namespace Delega.Api.Interfaces.Services
-{
+namespace Delega.Api.Interfaces.Services;
+
     public interface ILawyerService
     {
         LawyerResponse Add(LawyerCreateRequest lawyer);
@@ -9,4 +9,4 @@ namespace Delega.Api.Interfaces.Services
         IEnumerable<Lawyer> GetAll();
         LawyerResponse GetResponse(int id);
     }
-}
+

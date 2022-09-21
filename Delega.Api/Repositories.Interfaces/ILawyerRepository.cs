@@ -1,12 +1,12 @@
 ﻿using Delega.Api.Models;
 
-namespace Delega.Api.Interfaces.Repositories
+namespace Delega.Api.Interfaces.Repositories;
+
+public interface ILawyerRepository
 {
-    public interface ILawyerRepository
-    {
-        Lawyer Add(Lawyer lawyer);
-        Lawyer GetById(int id);
-        IEnumerable<Lawyer> GetAll();
-        LawyerResponse GetResponse(int id);
-    }
+    Lawyer Add(Lawyer lawyer);
+    Lawyer GetById(int id);
+    IEnumerable<Lawyer> GetAll();
+    LawyerResponse GetResponse(int id);
 }
+

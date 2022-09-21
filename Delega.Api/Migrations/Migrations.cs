@@ -40,3 +40,58 @@ public class AddLawyerTable : Migration
             .WithColumn("updatedtime").AsTime().Nullable();
     }
 }
+
+[Migration(20220921151633)]
+public class AddAuthorTable : Migration
+{
+    public override void Down()
+    {
+    }
+
+    public override void Up()
+    {
+        Create.Table("author")
+            .WithColumn("id").AsInt64().PrimaryKey().Identity()
+            .WithColumn("personid").AsInt64().NotNullable().ForeignKey("person", "id")
+            .WithColumn("depoiment").AsString().NotNullable()
+            .WithColumn("createdtime").AsDateTime().WithDefault(SystemMethods.CurrentUTCDateTime).NotNullable()
+            .WithColumn("updatedtime").AsTime().Nullable();
+    }
+}
+
+
+[Migration(20220921151520)]
+public class AddAccusedTable : Migration
+{
+    public override void Down()
+    {
+    }
+
+    public override void Up()
+    {
+        Create.Table("accused")
+            .WithColumn("id").AsInt64().PrimaryKey().Identity()
+            .WithColumn("personid").AsInt64().NotNullable().ForeignKey("person", "id")
+            .WithColumn("innocent").AsBoolean()
+            .WithColumn("createdtime").AsDateTime().WithDefault(SystemMethods.CurrentUTCDateTime).NotNullable()
+            .WithColumn("updatedtime").AsTime().Nullable();
+    }
+}
+
+[Migration(20220921161320)]
+public class AddJudicialProcessTable : Migration
+{
+    public override void Down()
+    {
+    }
+
+    public override void Up()
+    {
+        Create.Table("judicialprocess")
+            .WithColumn("id").AsInt64().PrimaryKey().Identity()
+            .WithColumn("personid").AsInt64().NotNullable().ForeignKey("person", "id")
+            .WithColumn("innocent").AsBoolean()
+            .WithColumn("createdtime").AsDateTime().WithDefault(SystemMethods.CurrentUTCDateTime).NotNullable()
+            .WithColumn("updatedtime").AsTime().Nullable();
+    }
+}

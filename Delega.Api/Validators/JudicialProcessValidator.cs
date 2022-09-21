@@ -15,7 +15,7 @@ namespace Delega.Api.Validators
                 .NotNull().WithMessage(messages[ConsMessagesSysId.AuthorNotNull]);
 
             RuleFor(x => x.DateHourCreated)
-                .Equal(DateTime.Today).WithMessage(messages[ConsMessagesSysId.DateHourCreatedInvalid]);
+                .GreaterThanOrEqualTo(DateTime.Now.AddDays(-7)).WithMessage(messages[ConsMessagesSysId.DateHourCreatedInvalid]);
 
             RuleFor(x => x.DateHourInProgress)
                 .GreaterThanOrEqualTo(x => x.DateHourCreated).WithMessage(messages[ConsMessagesSysId.DateHourInProgressInvalid]);
