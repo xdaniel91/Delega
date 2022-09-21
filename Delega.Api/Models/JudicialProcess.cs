@@ -4,9 +4,13 @@ namespace Delega.Api.Models
 {
     public class JudicialProcess
     {
+        public int Id { get; set; }
         public Person Author { get; set; }
+        public int AuthorId { get; set; }
         public Person Accused { get; set; }
+        public int AccusedId { get; set; }
         public Lawyer Lawyer { get; set; }
+        public int LawyerId { get; set; }
         public decimal RequestedValue { get; set; }
         public decimal? Value { get; set; }
         public string Reason { get; set; }
