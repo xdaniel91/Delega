@@ -43,17 +43,21 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] PersonCreateRequest person)
+    public async Task<IActionResult> PostAsync([FromBody] PersonCreateRequest person)
     {
         try
         {
-            var entity = Service.Add(person);
-            
+            var ct = HttpContext.RequestAborted;
+            var entity = await Service.AddAsync(person, ct);
             return Ok(entity);
         }
-        catch (Exception)
-        { 
-            throw;
+        catch (TaskCanceledException)
+        {
+            return StatusCode(StatusCodes.Status400BadRequest, "Operation cancelled");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ex);
         }
     }
 }

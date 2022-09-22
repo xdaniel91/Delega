@@ -27,27 +27,5 @@ namespace Delega.Api.Validators
                 .LessThan(DateTime.Today.AddYears(-18))
                 .GreaterThan(DateTime.Today.AddYears(-110));
         }
-
-        public PersonValidator(string idioma)
-        {
-            RuleFor(X => X.FirstName)
-            .NotNull().WithMessage(idioma)
-            .NotEmpty().WithMessage(idioma)
-            .MinimumLength(3).WithMessage(idioma);
-
-            RuleFor(X => X.LastName)
-                .NotNull().WithMessage(idioma)
-                .NotEmpty().WithMessage(idioma)
-                .MinimumLength(3).WithMessage(idioma);
-
-            RuleFor(X => X.Cpf)
-                .NotNull().WithMessage(idioma)
-                .NotEmpty().WithMessage(idioma)
-                .Length(11, 11).WithMessage(idioma);
-
-            RuleFor(X => X.BirthDate).NotNull().NotEmpty()
-                .LessThan(DateTime.Today.AddYears(-18))
-                .GreaterThan(DateTime.Today.AddYears(-110));
-        }
     }
 }

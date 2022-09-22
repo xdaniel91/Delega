@@ -3,6 +3,6 @@
     public interface IUnitOfWork
     {
         bool Commit();
-        Task<bool> CommitAsync();
+        Task<bool> CommitAsync(CancellationToken ct);
     }
 }

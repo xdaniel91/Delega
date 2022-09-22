@@ -37,6 +37,7 @@ namespace Delega.Api.Services.Implementation
 
         public JudicialProcess Add(JudicialProcessCreateRequest request)
         {
+            /* modificar para comparar o personId de accused, author e lawyer */
 
             if (request.AuthorId == request.AccusedId)
                 throw new Exception("Accused id cannot be equals author id.");

@@ -14,9 +14,9 @@
             return Context.SaveChanges() > 0;
         }
 
-        public async Task<bool> CommitAsync()
+        public async Task<bool> CommitAsync(CancellationToken ct)
         {
-            return await Context.SaveChangesAsync() > 0;
+            return await Context.SaveChangesAsync(ct) > 0;
         }
     }
 }

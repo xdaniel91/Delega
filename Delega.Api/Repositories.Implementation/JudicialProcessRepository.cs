@@ -14,7 +14,7 @@ namespace Delega.Api.Repositories.Implementation
         public JudicialProcessRepository(DelegaContext context)
         {
             Context = context;
-            DbSet = Context.judicialprocesses;
+            DbSet = Context.judicialprocess;
         }
 
         public JudicialProcess Add(JudicialProcess JudicialProcess)
@@ -42,9 +42,19 @@ namespace Delega.Api.Repositories.Implementation
             return DbSet.AsNoTracking();
         }
 
+        private JudicialProcessViewModel GetResponse(JudicialProcess entity)
+        {
+            var viewModel = new JudicialProcessViewModel
+            {
+
+            };
+            return viewModel;
+        }
+
         //public JudicialProcess GetWithRelationships(int id)
         //{
         //    //return DbSet.FirstOrDefault(x => x.Id == id);
         //}
+
     }
 }

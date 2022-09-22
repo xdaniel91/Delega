@@ -11,13 +11,14 @@ namespace Delega.Api.Database
         public DbSet<Lawyer> lawyer { get; set; }
         public DbSet<Author> author { get; set; }
         public DbSet<Accused> accused { get; set; }
-        public DbSet<JudicialProcess> judicialprocesses { get; set; }
+        public DbSet<JudicialProcess> judicialprocess { get; set; }
         public DelegaContext(DbContextOptions<DelegaContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new PersonMap());
             builder.ApplyConfiguration(new LawyerMap());
+            builder.ApplyConfiguration(new JudicialProcessMap());
         }
     }
 }

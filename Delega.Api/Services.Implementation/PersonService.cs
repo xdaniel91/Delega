@@ -6,15 +6,14 @@ using Delega.Api.Models;
 using Delega.Api.Validators;
 using Delega.Api.ViewModels;
 using FluentValidation;
-using System.Globalization;
 
 namespace Delega.Api.Services.Implementation;
 
 public class PersonService : IPersonService
 {
     private readonly static string _idioma = Thread.CurrentThread.CurrentCulture.Name;
-    private readonly IValidator<Person> Validator = new PersonValidator(_idioma);
-   
+    private readonly IValidator<Person> Validator;
+
     private readonly IPersonRepository repository;
     private readonly IUnitOfWork uow;
     private readonly IConsMessages ConsMessages;
@@ -23,12 +22,11 @@ public class PersonService : IPersonService
     {
         this.repository = repository;
         this.uow = uow;
-        //var language = Thread.CurrentThread.CurrentCulture.Name;
-        //var language = CultureInfo.CreateSpecificCulture("en-US");
+        var language = Thread.CurrentThread.CurrentCulture.Name;
         messages.SetMessages(_idioma);
-        //Messages = messages.GetMessages();
+        var keyValuePairs = messages.GetMessages();
         ConsMessages = messages;
-
+        Validator = new PersonValidator(keyValuePairs);
     }
 
     public Person Add(PersonCreateRequest personRequest)
@@ -64,6 +62,47 @@ public class PersonService : IPersonService
             throw;
         }
     }
+
+    public async Task<Person> AddAsync(PersonCreateRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var person = new Person
+            {
+                Cpf = request.Cpf,
+                CreatedTime = DateTime.Now,
+                BirthDate = request.BirthDate,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+            };
+
+            var validationResult = await Validator.ValidateAsync(person, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                var erros = validationResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
+                var errosString = string.Join(",", erros);
+                throw new ValidationException($"Informações inconsistentes.{Environment.NewLine}{errosString}");
+            }
+
+            try
+            {
+                var entity = await repository.AddAsync(person, cancellationToken);
+                var result = await uow.CommitAsync(cancellationToken);
+                return entity;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            throw;
+        }
+    }
+
+
 
     public void Delete(int id)
     {

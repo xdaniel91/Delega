@@ -89,9 +89,15 @@ public class AddJudicialProcessTable : Migration
     {
         Create.Table("judicialprocess")
             .WithColumn("id").AsInt64().PrimaryKey().Identity()
-            .WithColumn("personid").AsInt64().NotNullable().ForeignKey("person", "id")
-            .WithColumn("innocent").AsBoolean()
-            .WithColumn("createdtime").AsDateTime().WithDefault(SystemMethods.CurrentUTCDateTime).NotNullable()
-            .WithColumn("updatedtime").AsTime().Nullable();
+            .WithColumn("accusedid").AsInt64().NotNullable().ForeignKey("accused", "id")
+            .WithColumn("authorid").AsInt64().NotNullable().ForeignKey("author", "id")
+            .WithColumn("requestedvalue").AsDecimal().NotNullable()
+            .WithColumn("value").AsDecimal().Nullable()
+            .WithColumn("reason").AsString().NotNullable()
+            .WithColumn("verdict").AsString().Nullable()
+            .WithColumn("status").AsInt16().NotNullable()
+            .WithColumn("datehourcreated").AsDateTime().NotNullable()
+            .WithColumn("datehourinprogress").AsDateTime().Nullable()
+            .WithColumn("datehourfinished").AsDateTime().Nullable();
     }
 }
