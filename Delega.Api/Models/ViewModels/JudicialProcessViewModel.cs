@@ -9,7 +9,7 @@ namespace Delega.Api.Models.ViewModels
         public int AccusedId { get; set; }
         public string AuthorName { get; set; }
         public int AuthorId { get; set; }
-        public int MyProperty { get; set; }
+        public string LawyerName { get; set; }
         public int LawyerId { get; set; }
         public decimal RequestedValue { get; set; }
         public decimal? Value { get; set; }

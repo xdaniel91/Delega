@@ -3,11 +3,10 @@ using Delega.Api.Models.ViewModels;
 
 namespace Delega.Api.Interfaces.Repositories;
 
-    public interface IJudicialProcessRepository
-    {
-        JudicialProcess Add(JudicialProcess JudicialProcess);
-       // JudicialProcess GetWithRelationships(int id);
-        IEnumerable<JudicialProcess> GetAllWithRelationships();
-        IEnumerable<JudicialProcessViewModel> GetAll();
-    }
+public interface IJudicialProcessRepository
+{
+    Task<JudicialProcessViewModel> AddAsync(JudicialProcess JudicialProcess);
+    IEnumerable<JudicialProcess> GetAllWithRelationships();
+    JudicialProcessViewModel GetById(int id);
+}
 

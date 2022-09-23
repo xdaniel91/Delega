@@ -21,6 +21,7 @@ namespace Delega.Api.Database.Mapping
             builder.Property(x => x.UpadatedTime).HasColumnName("updatedtime");
             builder.Property(x => x.Oab).HasColumnName("oab");
             builder.Property(x => x.CreatedTime).HasColumnName("createdtime");
+            builder.Property(x => x.Name).HasColumnName("name");
         }
     }
 }

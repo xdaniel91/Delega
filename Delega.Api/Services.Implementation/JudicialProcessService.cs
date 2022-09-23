@@ -4,6 +4,7 @@ using Delega.Api.Interfaces.Repositories;
 using Delega.Api.Interfaces.Services;
 using Delega.Api.Models;
 using Delega.Api.Models.Requests;
+using Delega.Api.Models.ViewModels;
 using Delega.Api.Utils;
 using Delega.Api.Validators;
 using FluentValidation;
@@ -15,7 +16,6 @@ namespace Delega.Api.Services.Implementation
         private readonly IJudicialProcessRepository repository;
         private readonly IPersonRepository personRepository;
         private readonly ILawyerRepository lawyerRepositoy;
-        private readonly IPersonService personService;
         private readonly IValidator<JudicialProcess> Validator;
         private readonly IConsMessages consMessages;
         private readonly IUnitOfWork uow;
@@ -35,9 +35,9 @@ namespace Delega.Api.Services.Implementation
             this.uow = uow;
         }
 
-        public JudicialProcess Add(JudicialProcessCreateRequest request)
+        public JudicialProcessViewModel Add(JudicialProcessCreateRequest request)
         {
-            /* modificar para comparar o personId de accused, author e lawyer */
+            /// TODO: modificar para comparar o personId de accused, author e lawyer
 
             if (request.AuthorId == request.AccusedId)
                 throw new Exception("Accused id cannot be equals author id.");
@@ -61,13 +61,17 @@ namespace Delega.Api.Services.Implementation
             {
                 CreatedTime = DateTime.Now,
                 Depoiment = request.AuthorDepoiment,
-                PersonId = authorPerson.Id
+                PersonId = authorPerson.Id,
+                Cpf = authorPerson.Cpf,
+                Name = $"{authorPerson.FirstName} + {authorPerson.LastName}"
             };
 
             var accused = new Accused
             {
                 CreatedTime = DateTime.Now,
-                PersonId = accusedPerson.Id
+                PersonId = accusedPerson.Id,
+                Cpf = accusedPerson.Cpf,
+                Name = $"{accusedPerson.FirstName} + {accusedPerson.LastName}"
             };
 
             var judicialProcess = new JudicialProcess
@@ -92,9 +96,9 @@ namespace Delega.Api.Services.Implementation
 
             try
             {
-                var entity = repository.Add(judicialProcess);
+                var entity =  repository.AddAsync(judicialProcess);
                 var result = uow.Commit();
-                return entity;
+                return entity.Result;
             }
             catch (Exception)
             {
@@ -110,11 +114,12 @@ namespace Delega.Api.Services.Implementation
 
         public JudicialProcess GetByIdWithRelationships(int id)
         {
-            //if (id <= 0)
-            //    throw new Exception("Invalid id.");
-
-            //return repository.GetWithRelationships(id);
             return null;
+        }
+
+        public JudicialProcessViewModel GetById(int id)
+        {
+            return repository.GetById(id);
         }
     }
 }

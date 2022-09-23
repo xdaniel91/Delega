@@ -36,12 +36,12 @@ namespace Delega.Api.Controllers
         {
             try
             {
-                var process = Service.GetByIdWithRelationships(id);
+                var judicialProcess = Service.GetByIdWithRelationships(id);
                 
-                if (process is null)
+                if (judicialProcess is null)
                     return NotFound();
 
-                return Ok(process);
+                return Ok(judicialProcess);
             }
             catch (Exception ex)
             {

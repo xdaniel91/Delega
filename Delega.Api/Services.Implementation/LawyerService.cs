@@ -23,10 +23,17 @@ namespace Delega.Api.Services.Implementation
             if (lawyerCreateRequest.PersonId <= 0)
                 throw new Exception("The person id was not informed.");
 
+            var person = personRepository.GetById(lawyerCreateRequest.PersonId);
+            
+            if (person is null)
+                throw new Exception("Person not found.");
+
             var lawyer = new Lawyer
             {
                 Oab = lawyerCreateRequest.Oab,
-                PersonId = lawyerCreateRequest.PersonId
+                PersonId = lawyerCreateRequest.PersonId,
+                Name = $"{person.FirstName} + {person.LastName}",
+                CreatedTime = DateTime.UtcNow
             };
 
             var result = repository.Add(lawyer);

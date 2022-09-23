@@ -37,7 +37,8 @@ public class AddLawyerTable : Migration
             .WithColumn("personid").AsInt64().NotNullable().ForeignKey("person", "id")
             .WithColumn("oab").AsString().NotNullable()
             .WithColumn("createdtime").AsDateTime().WithDefault(SystemMethods.CurrentUTCDateTime).NotNullable()
-            .WithColumn("updatedtime").AsTime().Nullable();
+            .WithColumn("updatedtime").AsTime().Nullable()
+            .WithColumn("name").AsString().NotNullable();
     }
 }
 
@@ -55,7 +56,9 @@ public class AddAuthorTable : Migration
             .WithColumn("personid").AsInt64().NotNullable().ForeignKey("person", "id")
             .WithColumn("depoiment").AsString().NotNullable()
             .WithColumn("createdtime").AsDateTime().WithDefault(SystemMethods.CurrentUTCDateTime).NotNullable()
-            .WithColumn("updatedtime").AsTime().Nullable();
+            .WithColumn("updatedtime").AsTime().Nullable()
+            .WithColumn("name").AsString().NotNullable()
+            .WithColumn("cpf").AsString().NotNullable();
     }
 }
 
@@ -74,7 +77,9 @@ public class AddAccusedTable : Migration
             .WithColumn("personid").AsInt64().NotNullable().ForeignKey("person", "id")
             .WithColumn("innocent").AsBoolean()
             .WithColumn("createdtime").AsDateTime().WithDefault(SystemMethods.CurrentUTCDateTime).NotNullable()
-            .WithColumn("updatedtime").AsTime().Nullable();
+            .WithColumn("updatedtime").AsDateTime().Nullable()
+            .WithColumn("name").AsString().NotNullable()
+            .WithColumn("cpf").AsString().NotNullable();
     }
 }
 
@@ -91,6 +96,7 @@ public class AddJudicialProcessTable : Migration
             .WithColumn("id").AsInt64().PrimaryKey().Identity()
             .WithColumn("accusedid").AsInt64().NotNullable().ForeignKey("accused", "id")
             .WithColumn("authorid").AsInt64().NotNullable().ForeignKey("author", "id")
+            .WithColumn("lawyerid").AsInt64().NotNullable().ForeignKey("lawyer", "id")
             .WithColumn("requestedvalue").AsDecimal().NotNullable()
             .WithColumn("value").AsDecimal().Nullable()
             .WithColumn("reason").AsString().NotNullable()
@@ -125,3 +131,4 @@ public class FeedPersonTable : Migration
         Execute.Sql(sql);
     }
 }
+
