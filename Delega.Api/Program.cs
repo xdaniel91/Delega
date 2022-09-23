@@ -77,6 +77,7 @@ static IServiceProvider CreateServices(WebApplicationBuilder builder)
     .ScanIn(typeof(AddLawyerTable).Assembly).For.Migrations()
     .ScanIn(typeof(AddAuthorTable).Assembly).For.Migrations()
     .ScanIn(typeof(AddAccusedTable).Assembly).For.Migrations()
+    .ScanIn(typeof(FeedPersonTable).Assembly).For.Migrations()
     )
     .AddLogging(lb => lb.AddFluentMigratorConsole())
     .BuildServiceProvider(false);
