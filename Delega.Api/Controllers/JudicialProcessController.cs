@@ -37,7 +37,7 @@ namespace Delega.Api.Controllers
             try
             {
                 var judicialProcess = Service.GetByIdWithRelationships(id);
-                
+
                 if (judicialProcess is null)
                     return NotFound();
 
@@ -72,5 +72,10 @@ namespace Delega.Api.Controllers
             return BadRequest();
         }
 
+        [HttpPost("{id}")]
+        public Task<IActionResult> InProgressAsync([FromHeader] int id)
+        {
+            var entity = Service.GetById()
+        }
     }
 }

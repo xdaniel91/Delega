@@ -6,9 +6,9 @@ namespace Delega.Api.Interfaces.Services;
 
 public interface IJudicialProcessService
 {
-    JudicialProcessViewModel Add(JudicialProcessCreateRequest request);
-    JudicialProcess GetByIdWithRelationships(int id);
-    IEnumerable<JudicialProcess> GetAllWithRelationships();
-    JudicialProcessViewModel GetById(int id);
+    Task<JudicialProcessViewModel> AddAsync(JudicialProcessCreateRequest request);
+    Task<JudicialProcessViewModel> GetByIdAsync(int id);
+    Task<JudicialProcess> GetWithRelationsAsync(int id);
+    JudicialProcessViewModel GetViewModel(int id);
 }
 

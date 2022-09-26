@@ -5,53 +5,72 @@ using Delega.Api.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Dapper;
 
-namespace Delega.Api.Repositories.Implementation
+namespace Delega.Api.Repositories.Implementation;
+
+public class JudicialProcessRepository : IJudicialProcessRepository
 {
-    public class JudicialProcessRepository : IJudicialProcessRepository
+    private readonly DelegaContext Context;
+    private readonly DbSet<JudicialProcess> DbSet;
+    private readonly IUnitOfWork uow;
+
+    public JudicialProcessRepository(DelegaContext context, IUnitOfWork uow)
     {
-        private readonly DelegaContext Context;
-        private readonly DbSet<JudicialProcess> DbSet;
-        private readonly IUnitOfWork uow;
+        Context = context;
+        DbSet = Context.judicialprocess;
+        this.uow = uow;
+    }
 
-        public JudicialProcessRepository(DelegaContext context, IUnitOfWork uow)
+    public JudicialProcess Add(JudicialProcess JudicialProcess)
+    {
+        try
         {
-            Context = context;
-            DbSet = Context.judicialprocess;
-            this.uow = uow;
+            var entry = DbSet.Add(JudicialProcess);
+            var commitResult = uow.Commit();
+            return entry.Entity;
         }
-
-        public async Task<JudicialProcessViewModel> AddAsync(JudicialProcess JudicialProcess)
+        catch (Exception)
         {
-            try
-            {
-                var entry = await DbSet.AddAsync(JudicialProcess);
-
-                var commitResult = uow.Commit();
-                
-                var entity = entry.Entity;
-                
-                return GetResponse(entity.Id);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
+            throw;
         }
+    }
 
-        public IEnumerable<JudicialProcess> GetAllWithRelationships()
+    public async Task<JudicialProcess> AddAsync(JudicialProcess JudicialProcess)
+    {
+        try
         {
-            return DbSet.AsNoTracking();
+            var entry = await DbSet.AddAsync(JudicialProcess);
+
+            return entry.Entity;
         }
-
-        public JudicialProcessViewModel GetById(int id)
+        catch (Exception)
         {
-            return GetResponse(id);
+            throw;
         }
+    }
 
-        private JudicialProcessViewModel GetResponse(int id)
-        {
-            var sql = $@"SELECT
+    public IEnumerable<JudicialProcess> GetAll()
+    {
+        return DbSet;
+    }
+
+    public async Task<IEnumerable<JudicialProcess>> GetAllAsync()
+    {
+        return await DbSet.ToListAsync();
+    }
+
+    public JudicialProcessViewModel GetById(int id)
+    {
+        return GetResponse(id);
+    }
+
+    public async Task<JudicialProcessViewModel> GetByIdAsync(int id)
+    {
+        return GetResponse(id);
+    }
+
+    public JudicialProcessViewModel GetResponse(int id)
+    {
+        var sql = $@"SELECT
                       jp.id Id,
                       jp.accusedid AccusedId,
                       jp.authorid AuthorId,
@@ -74,10 +93,14 @@ namespace Delega.Api.Repositories.Implementation
                     JOIN lawyer lw ON lw.id = jp.lawyerid
                     WHERE jp.id = {id};";
 
-            using var connection = Context.Database.GetDbConnection();
-            var result = connection.QueryFirstOrDefault<JudicialProcessViewModel>(sql);
-            return result;
+        using var connection = Context.Database.GetDbConnection();
+        var result = connection.QueryFirstOrDefault<JudicialProcessViewModel>(sql);
+        return result;
+    }
 
-        }
+    public async Task<JudicialProcess> GetWithRelationsAsync(int id)
+    {
+        return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
     }
 }
+
