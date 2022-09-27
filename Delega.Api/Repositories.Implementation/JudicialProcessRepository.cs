@@ -20,11 +20,11 @@ public class JudicialProcessRepository : IJudicialProcessRepository
         this.uow = uow;
     }
 
-    public JudicialProcess Add(JudicialProcess JudicialProcess)
+    public async Task<JudicialProcess> AddAsync(JudicialProcess JudicialProcess)
     {
         try
         {
-            var entry = DbSet.Add(JudicialProcess);
+            var entry = await DbSet.AddAsync(JudicialProcess);
             var commitResult = uow.Commit();
             return entry.Entity;
         }
@@ -34,33 +34,16 @@ public class JudicialProcessRepository : IJudicialProcessRepository
         }
     }
 
-    public async Task<JudicialProcess> AddAsync(JudicialProcess JudicialProcess)
-    {
-        try
-        {
-            var entry = await DbSet.AddAsync(JudicialProcess);
-
-            return entry.Entity;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public IEnumerable<JudicialProcess> GetAll()
-    {
-        return DbSet;
-    }
 
     public async Task<IEnumerable<JudicialProcess>> GetAllAsync()
     {
         return await DbSet.ToListAsync();
     }
 
-    public JudicialProcessViewModel GetById(int id)
+
+    public async Task<JudicialProcess> GetWithRelationsAsync(int id)
     {
-        return GetResponse(id);
+        return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<JudicialProcessViewModel> GetByIdAsync(int id)
@@ -98,9 +81,10 @@ public class JudicialProcessRepository : IJudicialProcessRepository
         return result;
     }
 
-    public async Task<JudicialProcess> GetWithRelationsAsync(int id)
+    public JudicialProcess Update(JudicialProcess judicialProcess)
     {
-        return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
+        var entry = DbSet.Update(judicialProcess);
+        return entry.Entity;
     }
 }
 

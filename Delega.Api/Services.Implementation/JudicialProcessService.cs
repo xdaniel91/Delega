@@ -1,4 +1,5 @@
 ﻿using Delega.Api.Database;
+using Delega.Api.Exceptions;
 using Delega.Api.Interfaces;
 using Delega.Api.Interfaces.Repositories;
 using Delega.Api.Interfaces.Services;
@@ -21,10 +22,10 @@ public class JudicialProcessService : IJudicialProcessService
     private readonly IUnitOfWork uow;
 
     public JudicialProcessService(
-        IJudicialProcessRepository repository, 
-        IPersonRepository personRepository, 
-        ILawyerRepository lawyerRepositoy, 
-        IConsMessages consMessages, 
+        IJudicialProcessRepository repository,
+        IPersonRepository personRepository,
+        ILawyerRepository lawyerRepositoy,
+        IConsMessages consMessages,
         IUnitOfWork uow)
     {
         this.repository = repository;
@@ -42,22 +43,22 @@ public class JudicialProcessService : IJudicialProcessService
     {
 
         if (request.AuthorId == request.AccusedId)
-            throw new Exception("Accused id cannot be equals author id.");
+            throw new DelegaException("Accused id cannot be equals author id.");
 
         if (request.LawyerId == request.AuthorId || request.LawyerId == request.AccusedId)
-            throw new Exception("Lawyer id cannot be equals author or accused id.");
+            throw new DelegaException("Lawyer id cannot be equals author or accused id.");
 
         var authorPerson = personRepository.GetById(request.AuthorId);
         if (authorPerson is null)
-            throw new Exception("Author not found.");
+            throw new DelegaException("Author not found.");
 
         var accusedPerson = personRepository.GetById(request.AccusedId);
         if (accusedPerson is null)
-            throw new Exception("Accused not found.");
+            throw new DelegaException("Accused not found.");
 
         var lawyer = lawyerRepositoy.GetById(request.LawyerId);
         if (lawyer is null)
-            throw new Exception("Lawyer not found.");
+            throw new DelegaException("Lawyer not found.");
 
         var author = new Author
         {
@@ -93,7 +94,7 @@ public class JudicialProcessService : IJudicialProcessService
         {
             var errors = validationResult.Errors.Select(sl => sl.ErrorMessage);
             var errorsString = string.Join(",", errors);
-            throw new ValidationException($"Informações inconsistentes {Environment.NewLine}{errorsString}");
+            throw new DelegaException($"Informações inconsistentes {Environment.NewLine}{errorsString}");
         }
 
         try
@@ -110,6 +111,11 @@ public class JudicialProcessService : IJudicialProcessService
         }
     }
 
+    public async Task<IEnumerable<JudicialProcess>> GetAllAsync()
+    {
+        return await repository.GetAllAsync();
+    }
+
     public async Task<JudicialProcessViewModel> GetByIdAsync(int id)
     {
         return await repository.GetByIdAsync(id);
@@ -122,7 +128,28 @@ public class JudicialProcessService : IJudicialProcessService
 
     public Task<JudicialProcess> GetWithRelationsAsync(int id)
     {
-       return repository.GetWithRelationsAsync(id);
+        return repository.GetWithRelationsAsync(id);
+    }
+
+    public async Task<JudicialProcess> InProgressAsync(int id)
+    {
+        var process = await GetWithRelationsAsync(id);
+
+        if (process is null)
+            throw new DelegaException("judicial process not found");
+
+        if (process.Status != ConstGeneral.StatusJudicialProcess.Created)
+            throw new DelegaException("just can set 'InProgress' status for processes with 'Created' status.");
+
+        process.Status = ConstGeneral.StatusJudicialProcess.InProgress;
+        process.DateHourInProgress = DateTime.UtcNow;
+        var entity = repository.Update(process);
+        var result = uow.Commit();
+
+        if (result is false)
+            throw new DelegaException("cannot possible update judicial process.");
+
+        return entity;
     }
 }
 

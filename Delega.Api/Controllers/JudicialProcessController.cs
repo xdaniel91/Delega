@@ -1,6 +1,6 @@
-﻿using Delega.Api.Interfaces.Services;
+﻿using Delega.Api.Exceptions;
+using Delega.Api.Interfaces.Services;
 using Delega.Api.Models.Requests;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delega.Api.Controllers
@@ -17,16 +17,20 @@ namespace Delega.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
             try
             {
-                var processes = Service.GetAllWithRelationships();
-                return Ok(processes);
+                var result = await Service.GetAllAsync();
+                return Ok(result);
+            }
+            catch (DelegaException ex)
+            {
+                return BadRequest(ex);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return StatusCode(500, $"Erro interno {Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -36,46 +40,60 @@ namespace Delega.Api.Controllers
         {
             try
             {
-                var judicialProcess = Service.GetByIdWithRelationships(id);
+                var result = Service.GetViewModel(id);
 
-                if (judicialProcess is null)
+                if (result is null)
                     return NotFound();
 
-                return Ok(judicialProcess);
+                return Ok(result);
+            }
+            catch (DelegaException ex)
+            {
+                return BadRequest(ex);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return StatusCode(500, $"Erro interno {Environment.NewLine}{ex.Message}");
             }
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] JudicialProcessCreateRequest request)
+        public async Task<IActionResult> AddAsync([FromBody] JudicialProcessCreateRequest request)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var result = Service.Add(request);
-                    return Ok(result);
-                }
-                catch (ValidationException ex)
-                {
-                    return BadRequest(ex);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex);
-                }
+            if (!ModelState.IsValid)
+                return BadRequest();
 
+            try
+            {
+                var result = await Service.AddAsync(request);
+                return StatusCode(201, result);
             }
-            return BadRequest();
+            catch (DelegaException ex)
+            {
+                return BadRequest(ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno {Environment.NewLine}{ex.Message}");
+            }
         }
 
         [HttpPost("{id}")]
-        public Task<IActionResult> InProgressAsync([FromHeader] int id)
+        public async Task<IActionResult> InProgressAsync([FromHeader] int id)
         {
-            var entity = Service.GetById()
+            try
+            {
+                var result = await Service.InProgressAsync(id);
+                return Ok(result);
+            }
+            catch (DelegaException ex)
+            {
+                return BadRequest(ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno {Environment.NewLine}{ex.Message}");
+            }
         }
     }
 }
