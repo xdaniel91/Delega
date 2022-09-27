@@ -13,5 +13,6 @@ public interface IJudicialProcessRepository
     Task<IEnumerable<JudicialProcess>> GetAllAsync();
     JudicialProcessViewModel GetResponse(int id);
     Task<JudicialProcess> GetWithRelationsAsync(int id);
+    JudicialProcess Update(JudicialProcess judicialProcess);
 }
 

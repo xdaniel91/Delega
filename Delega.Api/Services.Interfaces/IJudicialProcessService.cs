@@ -8,7 +8,9 @@ public interface IJudicialProcessService
 {
     Task<JudicialProcessViewModel> AddAsync(JudicialProcessCreateRequest request);
     Task<JudicialProcessViewModel> GetByIdAsync(int id);
+    Task<IEnumerable<JudicialProcess>> GetAllAsync();
     Task<JudicialProcess> GetWithRelationsAsync(int id);
     JudicialProcessViewModel GetViewModel(int id);
+    Task<JudicialProcessViewModel> InProgressAsync(int id);
 }
 

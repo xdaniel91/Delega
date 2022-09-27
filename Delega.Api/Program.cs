@@ -18,15 +18,10 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DelegaContext>(
 options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega.postgres")));
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("delega.redis");
-});
-
 using var scope = ServiceProvider.CreateScope();
 UpdateDatabase(scope.ServiceProvider);
 
-builder.Services.AddScoped<IConsMessages, ConstMessages>();
+builder.Services.AddScoped<IConstMessages, ConstMessages>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 

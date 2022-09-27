@@ -11,27 +11,23 @@ namespace Delega.Api.Services.Implementation;
 
 public class PersonService : IPersonService
 {
-    private readonly static string _idioma = Thread.CurrentThread.CurrentCulture.Name;
     private readonly IValidator<Person> Validator;
-
     private readonly IPersonRepository repository;
     private readonly IUnitOfWork uow;
-    private readonly IConsMessages ConsMessages;
+    private readonly IConstMessages ConstMessages;
+    private readonly Dictionary<string, string> errorMessages;
 
-    public PersonService(IPersonRepository repository, IUnitOfWork uow, IConsMessages messages)
+    public PersonService(IPersonRepository repository, IUnitOfWork uow, IConstMessages messages)
     {
         this.repository = repository;
         this.uow = uow;
-        var language = Thread.CurrentThread.CurrentCulture.Name;
-        messages.SetMessages(_idioma);
-        var keyValuePairs = messages.GetMessages();
-        ConsMessages = messages;
-        Validator = new PersonValidator(keyValuePairs);
+        this.ConstMessages = messages;
+        this.errorMessages = ConstMessages.GetMessages();
+        Validator = new PersonValidator(errorMessages);
     }
 
     public Person Add(PersonCreateRequest personRequest)
     {
-
         var person = new Person
         {
             Cpf = personRequest.Cpf,

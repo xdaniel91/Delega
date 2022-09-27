@@ -17,11 +17,11 @@ namespace Delega.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
             try
             {
-                var processes = Service.GetAllWithRelationships();
+                var processes = await Service.GetAllAsync();
                 return Ok(processes);
             }
             catch (Exception ex)
@@ -32,11 +32,11 @@ namespace Delega.Api.Controllers
 
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             try
             {
-                var judicialProcess = Service.GetByIdWithRelationships(id);
+                var judicialProcess = await Service.GetByIdAsync(id);
 
                 if (judicialProcess is null)
                     return NotFound();
@@ -50,13 +50,13 @@ namespace Delega.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] JudicialProcessCreateRequest request)
+        public async Task<IActionResult> AddAsync([FromBody] JudicialProcessCreateRequest request)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = Service.Add(request);
+                    var result = await Service.AddAsync(request);
                     return Ok(result);
                 }
                 catch (ValidationException ex)
@@ -75,7 +75,7 @@ namespace Delega.Api.Controllers
         [HttpPost("{id}")]
         public Task<IActionResult> InProgressAsync([FromHeader] int id)
         {
-            var entity = Service.GetById()
+            var result = Service.InProgressAsync(id);
         }
     }
 }

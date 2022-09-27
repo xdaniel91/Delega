@@ -102,5 +102,12 @@ public class JudicialProcessRepository : IJudicialProcessRepository
     {
         return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
     }
+
+    public JudicialProcess Update(JudicialProcess judicialProcess)
+    {
+       var entry = DbSet.Update(judicialProcess);
+       
+        return entry.Entity;
+    }
 }
 

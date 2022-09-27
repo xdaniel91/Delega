@@ -17,25 +17,24 @@ public class JudicialProcessService : IJudicialProcessService
     private readonly IPersonRepository personRepository;
     private readonly ILawyerRepository lawyerRepositoy;
     private readonly IValidator<JudicialProcess> Validator;
-    private readonly IConsMessages consMessages;
+    private readonly IConstMessages constMessages;
     private readonly IUnitOfWork uow;
 
     public JudicialProcessService(
         IJudicialProcessRepository repository, 
         IPersonRepository personRepository, 
         ILawyerRepository lawyerRepositoy, 
-        IConsMessages consMessages, 
+        IConstMessages constMessages, 
         IUnitOfWork uow)
     {
+       
         this.repository = repository;
         this.personRepository = personRepository;
         this.lawyerRepositoy = lawyerRepositoy;
-        this.consMessages = consMessages;
-        var language = Thread.CurrentThread.CurrentCulture.Name;
-        consMessages.SetMessages(language);
-        var errorMessages = consMessages.GetMessages();
-        Validator = new JudicialProcessValidator(errorMessages);
+        this.constMessages = constMessages;
         this.uow = uow;
+        var errorMessages = constMessages.GetMessages();
+        this.Validator = new JudicialProcessValidator(errorMessages);
     }
 
     public async Task<JudicialProcessViewModel> AddAsync(JudicialProcessCreateRequest request)
@@ -110,6 +109,11 @@ public class JudicialProcessService : IJudicialProcessService
         }
     }
 
+    public Task<IEnumerable<JudicialProcess>> GetAllAsync()
+    {
+        return repository.GetAllAsync();
+    }
+
     public async Task<JudicialProcessViewModel> GetByIdAsync(int id)
     {
         return await repository.GetByIdAsync(id);
@@ -123,6 +127,17 @@ public class JudicialProcessService : IJudicialProcessService
     public Task<JudicialProcess> GetWithRelationsAsync(int id)
     {
        return repository.GetWithRelationsAsync(id);
+    }
+
+    public async Task<JudicialProcessViewModel> InProgressAsync(int id)
+    {
+        var judicialProcess = await repository.GetWithRelationsAsync(id);
+
+        judicialProcess.Status = ConstGeneral.StatusJudicialProcess.InProgress;
+
+        var entity = repository.Update(judicialProcess);
+        var result = uow.Commit();
+        return repository.GetResponse(entity.Id);
     }
 }
 
