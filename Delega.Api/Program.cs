@@ -26,7 +26,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
 using var scope = ServiceProvider.CreateScope();
 UpdateDatabase(scope.ServiceProvider);
 
-builder.Services.AddScoped<IConsMessages, ConstMessages>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 

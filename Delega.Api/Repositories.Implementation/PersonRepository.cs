@@ -24,7 +24,7 @@ public class PersonRepository : IPersonRepository
 
     public async Task<Person> AddAsync(Person person, CancellationToken cancellationToken)
     {
-        var entry = await DbSet.AddAsync(person);
+        var entry = await DbSet.AddAsync(person, cancellationToken);
         return entry.Entity;
     }
 

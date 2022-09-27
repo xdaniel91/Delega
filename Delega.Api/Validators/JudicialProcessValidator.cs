@@ -6,25 +6,25 @@ namespace Delega.Api.Validators
 {
     public class JudicialProcessValidator : AbstractValidator<JudicialProcess>
     {
-        public JudicialProcessValidator(Dictionary<string, string> messages)
+        public JudicialProcessValidator()
         {
             RuleFor(x => x.Accused)
-                .NotNull().WithMessage(messages[ConsMessagesSysId.AccusedNotNull]);
+                .NotNull().WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.AccusedNotNull));
            
             RuleFor(x => x.Author)
-                .NotNull().WithMessage(messages[ConsMessagesSysId.AuthorNotNull]);
+                .NotNull().WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.AuthorNotNull));
 
             RuleFor(x => x.DateHourCreated)
-                .GreaterThanOrEqualTo(DateTime.Now.AddDays(-7)).WithMessage(messages[ConsMessagesSysId.DateHourCreatedInvalid]);
+                .GreaterThanOrEqualTo(DateTime.Now.AddDays(-7)).WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.DateHourCreatedInvalid));
 
             RuleFor(x => x.DateHourInProgress)
-                .GreaterThanOrEqualTo(x => x.DateHourCreated).WithMessage(messages[ConsMessagesSysId.DateHourInProgressInvalid]);
+                .GreaterThanOrEqualTo(x => x.DateHourCreated).WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.DateHourInProgressInvalid));
 
             RuleFor(x => x.DateHourFinished)
-                .GreaterThanOrEqualTo(x => x.DateHourInProgress).WithMessage(messages[ConsMessagesSysId.DateHourFinishedInvalid]);
+                .GreaterThanOrEqualTo(x => x.DateHourInProgress).WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.DateHourFinishedInvalid));
 
             RuleFor(x => x.Lawyer)
-                .NotNull().WithMessage(messages[ConsMessagesSysId.LawyerNotNull]);
+                .NotNull().WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.LawyerNotNull));
 
         }
     }

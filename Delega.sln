@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delega.Api", "Delega.Api\Delega.Api.csproj", "{39003DE9-72FF-40BD-819A-BBC66A71FE4D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Testes", "0 - Testes", "{844B35A1-C40A-4A71-A554-6F0DFF0B4A78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delega.Tests", "Delega.Tests\Delega.Tests.csproj", "{7F8D1855-1713-4817-B99B-2B1744242134}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{39003DE9-72FF-40BD-819A-BBC66A71FE4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39003DE9-72FF-40BD-819A-BBC66A71FE4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39003DE9-72FF-40BD-819A-BBC66A71FE4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F8D1855-1713-4817-B99B-2B1744242134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F8D1855-1713-4817-B99B-2B1744242134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F8D1855-1713-4817-B99B-2B1744242134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F8D1855-1713-4817-B99B-2B1744242134}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F8D1855-1713-4817-B99B-2B1744242134} = {844B35A1-C40A-4A71-A554-6F0DFF0B4A78}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46628CFD-1B08-439B-A35D-C0812D63A73F}

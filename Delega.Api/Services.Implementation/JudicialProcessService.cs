@@ -1,6 +1,5 @@
 ﻿using Delega.Api.Database;
 using Delega.Api.Exceptions;
-using Delega.Api.Interfaces;
 using Delega.Api.Interfaces.Repositories;
 using Delega.Api.Interfaces.Services;
 using Delega.Api.Models;
@@ -17,25 +16,18 @@ public class JudicialProcessService : IJudicialProcessService
     private readonly IJudicialProcessRepository repository;
     private readonly IPersonRepository personRepository;
     private readonly ILawyerRepository lawyerRepositoy;
-    private readonly IValidator<JudicialProcess> Validator;
-    private readonly IConsMessages consMessages;
+    private readonly IValidator<JudicialProcess> Validator = new JudicialProcessValidator();
     private readonly IUnitOfWork uow;
 
     public JudicialProcessService(
         IJudicialProcessRepository repository,
         IPersonRepository personRepository,
         ILawyerRepository lawyerRepositoy,
-        IConsMessages consMessages,
         IUnitOfWork uow)
     {
         this.repository = repository;
         this.personRepository = personRepository;
         this.lawyerRepositoy = lawyerRepositoy;
-        this.consMessages = consMessages;
-        var language = Thread.CurrentThread.CurrentCulture.Name;
-        consMessages.SetMessages(language);
-        var errorMessages = consMessages.GetMessages();
-        Validator = new JudicialProcessValidator(errorMessages);
         this.uow = uow;
     }
 
