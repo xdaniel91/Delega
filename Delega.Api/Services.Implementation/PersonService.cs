@@ -1,4 +1,5 @@
 ﻿using Delega.Api.Database;
+using Delega.Api.Exceptions;
 using Delega.Api.Interfaces;
 using Delega.Api.Interfaces.Repositories;
 using Delega.Api.Interfaces.Services;
@@ -18,7 +19,6 @@ public class PersonService : IPersonService
 
     public PersonService(IPersonRepository repository, IUnitOfWork uow)
     {
-        var language = Thread.CurrentThread.CurrentCulture.Name; 
         this.repository = repository;
         this.uow = uow;
         
@@ -43,7 +43,7 @@ public class PersonService : IPersonService
         {
             var erros = validationResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
             var errosString = string.Join(",", erros);
-            throw new ValidationException($"Informações inconsistentes.{Environment.NewLine}{errosString}");
+            throw new DelegaException($"Informações inconsistentes.{Environment.NewLine}{errosString}");
         }
 
         try
@@ -71,14 +71,14 @@ public class PersonService : IPersonService
                 FirstName = request.FirstName,
                 LastName = request.LastName,
             };
-
+            
             var validationResult = await Validator.ValidateAsync(person, cancellationToken);
 
             if (!validationResult.IsValid)
             {
                 var erros = validationResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
                 var errosString = string.Join(",", erros);
-                throw new ValidationException($"Informações inconsistentes.{Environment.NewLine}{errosString}");
+                throw new DelegaException($"Informações inconsistentes.{Environment.NewLine}{errosString}");
             }
 
             try
@@ -96,6 +96,10 @@ public class PersonService : IPersonService
         {
             throw;
         }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
     }
 
 
@@ -107,14 +111,14 @@ public class PersonService : IPersonService
             var person = GetById(id);
 
             if (person is null)
-                throw new Exception("Person not found.");
+                throw new DelegaException("Person not found.");
 
             repository.Delete(person);
 
             var result = uow.Commit();
 
             if (result is false)
-                throw new Exception("Perosn cannot be deleted.");
+                throw new DelegaException("Perosn cannot be deleted.");
 
         }
         catch (Exception) { throw; }
@@ -147,7 +151,7 @@ public class PersonService : IPersonService
     {
         var personUpdate = repository.GetById(id);
         if (personUpdate is null)
-            throw new Exception("Person not found.");
+            throw new DelegaException("Person not found.");
 
         if (!string.IsNullOrEmpty(personViewModel.Cpf))
             personUpdate.Cpf = personViewModel.Cpf;

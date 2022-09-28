@@ -85,6 +85,10 @@ public static class ErrorMessagesSysid
     public static string LastNameNotEmptySysid => "98ce118a-3032-4c53-9ce3-390cd4bbe47c";
 
     public static string CpfNotEmptySysid => "6d20d280-ab4e-47b9-9455-711dfd555e0c";
+    public static string CpfInvalidSysid => "c8fc4f73-3880-4ce5-8313-bda71137a9ac";
+
+    public static string BirthDateInvalidSysid => "6f68520e-117e-401e-93f6-17f71c26630f";
+
     #endregion
 
     #region JudicialProcess
@@ -139,6 +143,8 @@ public static class ErrorMessages
                 { ErrorMessagesSysid.LastNameNotNullSysid, "Sobrenome não pode ser nulo." },
                 { ErrorMessagesSysid.LastNameMinimiumLengthSysid, "Sobrenome deve ter pelo menos 3 letras." },
                 { ErrorMessagesSysid.CpfNotEmptySysid, "Cpf não pode ser vazio." },
+                { ErrorMessagesSysid.CpfInvalidSysid, "Cpf inválido." },
+                { ErrorMessagesSysid.BirthDateInvalidSysid, "Data de nascimento inválida." },
 
                 { ErrorMessagesSysid.AccusedNotNull, "Acusado não pode ser nulo." },
                 { ErrorMessagesSysid.AuthorNotNull, "Autor não pode ser nulo." },
@@ -171,6 +177,8 @@ public static class ErrorMessages
                 { ErrorMessagesSysid.LastNameNotNullSysid, "Last name cannot be null." },
                 { ErrorMessagesSysid.LastNameMinimiumLengthSysid, "Last name must be at least 3 letters long." },
                 { ErrorMessagesSysid.CpfNotEmptySysid, "Cpf cannot be empty." },
+                { ErrorMessagesSysid.CpfInvalidSysid, "Invalid cpf." },
+                { ErrorMessagesSysid.BirthDateInvalidSysid, "Invalid birthdate." },
 
                 {ErrorMessagesSysid.AccusedNotNull, "Accused cannot be void." },
                 {ErrorMessagesSysid.AuthorNotNull, "Author cannot be null." },
@@ -203,6 +211,8 @@ public static class ErrorMessages
                 { ErrorMessagesSysid.LastNameNotNullSysid, "El apellido no puede ser nulo." },
                 { ErrorMessagesSysid.LastNameMinimiumLengthSysid, "El apellido debe tener al menos 3 letras." },
                 { ErrorMessagesSysid.CpfNotEmptySysid, "Cpf no puede estar vacío." },
+                { ErrorMessagesSysid.CpfInvalidSysid, "Cpf invalido." },
+                { ErrorMessagesSysid.CpfNotEmptySysid, "Hora de nascimento invalida." },
 
                 { ErrorMessagesSysid.AccusedNotNull, "Acusado no puede ser nulo." },
                 { ErrorMessagesSysid.AuthorNotNull, "El autor no puede ser nulo." },

@@ -2,6 +2,7 @@
 using Delega.Api.Interfaces.Repositories;
 using Delega.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Delega.Api.Repositories.Implementation;
 
@@ -40,7 +41,7 @@ public class PersonRepository : IPersonRepository
 
     public Person GetById(int id)
     {
-        return DbSet.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id));
+        return DbSet.AsNoTracking().FirstOrDefault(x => x.Id == id);
     }
 
     public Person Update(Person person)

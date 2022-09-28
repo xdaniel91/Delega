@@ -23,8 +23,10 @@ public class PersonValidator : AbstractValidator<Person>
             .NotEmpty().WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.CpfNotEmptySysid))
             .Length(11, 11);
 
-        RuleFor(X => X.BirthDate).NotNull().NotEmpty()
-            .LessThan(DateTime.Today.AddYears(-18))
-            .GreaterThan(DateTime.Today.AddYears(-110));
+        RuleFor(X => X.BirthDate)
+            .NotNull().WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.BirthDateInvalidSysid))
+            .NotEmpty().WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.BirthDateInvalidSysid))
+            .LessThan(DateTime.Today.AddYears(-18)).WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.BirthDateInvalidSysid))
+            .GreaterThan(DateTime.Today.AddYears(-110)).WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.BirthDateInvalidSysid));
     }
 }
