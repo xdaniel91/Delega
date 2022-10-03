@@ -1,5 +1,5 @@
-﻿using Delega.Api.Interfaces.Services;
-using Delega.Api.Models;
+﻿using Delega.Api.Models;
+using Delega.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delega.Api.Controllers;
@@ -30,9 +30,9 @@ public class LawyerController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetByIdAsync(int id)
     {
-        var lawyer = Service.GetById(id);
+        var lawyer = await Service.GetByIdAsync(id);
 
         if (lawyer is null)
             return NotFound(lawyer);
@@ -46,7 +46,7 @@ public class LawyerController : ControllerBase
     {
         if (ModelState.IsValid)
         {
-            var result = Service.Add(lawyer);
+            var result = Service.AddAsync(lawyer);
             return Ok(result);
         }
         else

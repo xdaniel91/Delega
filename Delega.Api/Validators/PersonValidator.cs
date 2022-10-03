@@ -21,7 +21,7 @@ public class PersonValidator : AbstractValidator<Person>
         RuleFor(X => X.Cpf)
             .NotNull()
             .NotEmpty().WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.CpfNotEmptySysid))
-            .Length(11, 11);
+            .Length(11, 11).WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.CpfInvalidSysid));
 
         RuleFor(X => X.BirthDate)
             .NotNull().WithMessage(ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.BirthDateInvalidSysid))

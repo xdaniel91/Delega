@@ -1,13 +1,12 @@
 using Delega.Api.Database;
 using Delega.Api.Interfaces.Repositories;
-using Delega.Api.Interfaces.Services;
 using Delega.Api.Repositories.Implementation;
 using Delega.Api.Services.Implementation;
 using Microsoft.EntityFrameworkCore;
 using FluentMigrator.Runner;
 using Delega.Api.Migrations;
-using Delega.Api.Utils;
-using Delega.Api.Interfaces;
+using Delega.Api.Services.Interfaces;
+using Delega.Api.Repositories;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

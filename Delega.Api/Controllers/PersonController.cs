@@ -1,6 +1,6 @@
 ﻿using Delega.Api.Database;
-using Delega.Api.Interfaces.Services;
 using Delega.Api.Models;
+using Delega.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -21,9 +21,9 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
-        var people = Service.GetAll();
+        var people = await Service.GetAllAsync();
 
         if (people is null)
             return NotFound();
@@ -32,9 +32,9 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get(int id)
+    public async Task<IActionResult> GetAsync(int id)
     {
-        var person = Service.GetById(id);
+        var person = await Service.GetByIdAsync(id);
 
         if (person is null)
             return NotFound();

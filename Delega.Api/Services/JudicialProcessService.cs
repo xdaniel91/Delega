@@ -1,10 +1,10 @@
 ﻿using Delega.Api.Database;
 using Delega.Api.Exceptions;
 using Delega.Api.Interfaces.Repositories;
-using Delega.Api.Interfaces.Services;
 using Delega.Api.Models;
 using Delega.Api.Models.Requests;
 using Delega.Api.Models.ViewModels;
+using Delega.Api.Services.Interfaces;
 using Delega.Api.Utils;
 using Delega.Api.Validators;
 using FluentValidation;
@@ -40,15 +40,15 @@ public class JudicialProcessService : IJudicialProcessService
         if (request.LawyerId == request.AuthorId || request.LawyerId == request.AccusedId)
             throw new DelegaException("Lawyer id cannot be equals author or accused id.");
 
-        var authorPerson = personRepository.GetById(request.AuthorId);
+        var authorPerson = await personRepository.GetByIdAsync(request.AuthorId);
         if (authorPerson is null)
             throw new DelegaException("Author not found.");
 
-        var accusedPerson = personRepository.GetById(request.AccusedId);
+        var accusedPerson = await personRepository.GetByIdAsync(request.AccusedId);
         if (accusedPerson is null)
             throw new DelegaException("Accused not found.");
 
-        var lawyer = lawyerRepositoy.GetById(request.LawyerId);
+        var lawyer = await lawyerRepositoy.GetByIdAsync(request.LawyerId);
         if (lawyer is null)
             throw new DelegaException("Lawyer not found.");
 

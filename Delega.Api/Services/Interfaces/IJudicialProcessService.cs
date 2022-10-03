@@ -2,7 +2,7 @@
 using Delega.Api.Models.Requests;
 using Delega.Api.Models.ViewModels;
 
-namespace Delega.Api.Interfaces.Services;
+namespace Delega.Api.Services.Interfaces;
 
 public interface IJudicialProcessService
 {

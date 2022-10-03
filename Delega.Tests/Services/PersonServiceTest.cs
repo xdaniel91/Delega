@@ -1,149 +1,127 @@
 ﻿using Delega.Api.Database;
 using Delega.Api.Exceptions;
 using Delega.Api.Interfaces.Repositories;
-using Delega.Api.Interfaces.Services;
 using Delega.Api.Models;
 using Delega.Api.Services.Implementation;
+using Delega.Api.Services.Interfaces;
 using Delega.Api.Utils;
-using Delega.Api.Validators;
-using FluentValidation;
 using Moq;
 using Xunit;
-
 
 namespace Delega.Tests.Services;
 public class PersonServiceTest
 {
     private IPersonService personService;
-    private IValidator<Person> _validator = new PersonValidator();
 
     public PersonServiceTest()
     {
-        this.personService = new PersonService(
+        personService = new PersonService(
             new Mock<IPersonRepository>().Object,
             new Mock<IUnitOfWork>().Object);
     }
 
-    #region AddAsync
-    [Fact]
-    public async Task PostAsync_InvalidFirstname()
+
+    [Theory(DisplayName = "AddAsync fail")]
+    [InlineData("Ka", "Anivia", "14429933081", "1999-02-25")]
+    [InlineData("", "Anivia", "14429933081", "1999-02-05")]
+    [InlineData(null, "Anivia", "14429933081", "1999-02-05")]
+    [InlineData("Karthus", "An", "14429933081", "1999-02-05")]
+    [InlineData("Karthus", "", "14429933081", "1999-02-05")]
+    [InlineData("Karthus", null, "14429933081", "1999-02-05")]
+    [InlineData("Karthus", "Anivia", "123456", "1999-02-05")]
+    [InlineData("Karthus", "Anivia", "", "1999-02-05")]
+    [InlineData("Karthus", "Anivia", null, "1999-02-05")]
+    [InlineData("Karthus", "Anivia", "14429933081", "2020-02-05")]
+    public async Task AddAsync_Fail(string firstname, string lastname, string cpf, string birth)
     {
         var ex = await Assert.ThrowsAsync<DelegaException>(async () =>
            await personService.AddAsync(
            new PersonCreateRequest
            {
-               FirstName = "",
-
-
-               BirthDate = DateTime.Now.AddYears(-20),
-               Cpf = "85406985019",
-               LastName = "Haldoyrod"
+               FirstName = firstname,
+               Cpf = cpf,
+               LastName = lastname,
+               BirthDate = Convert.ToDateTime(birth)
            }, CancellationToken.None));
 
-        var firstnameNotEmpty = ErrorMessagesSysid.FirstNameNotEmptySysid;
-        var firstnameNotNull = ErrorMessagesSysid.FirstNameNotNullSysid;
-        var firstnameLength = ErrorMessagesSysid.FirstNameMinimiumLengthSysid;
+        var errorMessages = new string[] {
+            ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.FirstNameMinimiumLengthSysid),
+             ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.FirstNameNotEmptySysid),
+             ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.FirstNameNotNullSysid),
+             ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.LastNameMinimiumLengthSysid),
+             ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.LastNameNotEmptySysid),
+             ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.LastNameNotNullSysid),
+             ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.CpfInvalidSysid),
+             ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.CpfNotEmptySysid),
+             ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.BirthDateInvalidSysid)};
 
-        var expectedMessage = ErrorMessages.GetMessageByLanguageSysid(firstnameNotEmpty);
+        bool containsResult = false;
 
-        Assert.Contains(expectedMessage, ex.Message);
+        foreach (var errorMessage in errorMessages)
+        {
+            if (ex.Message.Contains(errorMessage))
+            {
+                containsResult = true;
+                break;
+            }
+        }
+
+        Assert.True(containsResult);
     }
 
-    [Fact]
-    public async Task PostAsync_InvalidLasttname()
+    [Fact(DisplayName = "AddAsync sucess")]
+    public async Task AddAsync_SucessAsync()
     {
-        var ex = await Assert.ThrowsAsync<DelegaException>(async () =>
-           await personService.AddAsync(
-           new PersonCreateRequest
-           {
-               LastName = "",
+        var _personRequest = new PersonCreateRequest
+        {
+            BirthDate = DateTime.Now.AddYears(-30),
+            Cpf = "07685817101",
+            FirstName = "Udyr",
+            LastName = "Rek'sai"
+        };
+        
+        var _personInsert = new Person
+        {
+            BirthDate = DateTime.Now.AddYears(-30),
+            Cpf = "07685817101",
+            CreatedTime = DateTime.Today,
+            FirstName = "Udyr",
+            LastName = "Rek'sai",
+            Id = 5,
+            UpadatedTime = null
+        };
 
+        var result = await personService.AddAsync(_personRequest, CancellationToken.None);
 
-               BirthDate = DateTime.Now.AddYears(-20),
-               Cpf = "85406985019",
-               FirstName = "Esnan"
-           }, CancellationToken.None));
-
-        var lastnameNotEmpty = ErrorMessagesSysid.LastNameNotEmptySysid;
-        var lastnameNotNll = ErrorMessagesSysid.LastNameNotNullSysid;
-        var lastnameLenght = ErrorMessagesSysid.LastNameMinimiumLengthSysid;
-
-        var expectedMessage = ErrorMessages.GetMessageByLanguageSysid(lastnameNotEmpty);
-
-        Assert.Contains(expectedMessage, ex.Message);
+        Assert.Null(result);
     }
 
-    [Fact]
-    public async Task PostAsync_InvalidCpf()
-    {
-        var ex = await Assert.ThrowsAsync<DelegaException>(async () =>
-           await personService.AddAsync(
-           new PersonCreateRequest
-           {
-               Cpf = "",
 
-
-               BirthDate = DateTime.Now.AddYears(-20),
-               FirstName = "Esnan",
-               LastName = "Haldoyrod"
-           }, CancellationToken.None));
-
-        var cpfNotEmpty = ErrorMessagesSysid.CpfNotEmptySysid;
-        var cpfInvalid = ErrorMessagesSysid.CpfInvalidSysid;
-
-        var expectedMessage = ErrorMessages.GetMessageByLanguageSysid(cpfNotEmpty);
-
-        Assert.Contains(expectedMessage, ex.Message);
-    }
-
-    [Fact]
-    public async Task PostAsync_InvalidBirthdate()
-    {
-        var ex = await Assert.ThrowsAsync<DelegaException>(async () =>
-           await personService.AddAsync(
-           new PersonCreateRequest
-           {
-               BirthDate = DateTime.Now.AddYears(-115),
-
-
-               Cpf = "85406985019",
-               FirstName = "",
-               LastName = "Haldoyrod"
-           }, CancellationToken.None));
-
-        var expectedMessage = ErrorMessages.GetMessageByLanguageSysid(ErrorMessagesSysid.BirthDateInvalidSysid);
-
-        Assert.Contains(expectedMessage, ex.Message);
-    }
-    #endregion
-
-    #region Get
-
-    [Fact]
-    public void GetAll()
+    [Fact(DisplayName = "Get all")]
+    public async Task GetAllAsync()
     {
         List<Person> _persons = new();
-
+       
         _persons.Add(
             new Person
             {
                 BirthDate = DateTime.Today,
                 Cpf = "07685817101",
                 CreatedTime = DateTime.UtcNow,
-                FirstName = "Daniel",
-                LastName = "Rodrigues",
+                FirstName = "Anivia",
+                LastName = "Garen",
                 Id = 666
             });
 
-        var _repository = new Mock<IPersonRepository>();
-        _repository.Setup(x => x.GetAll()).Returns(_persons);
+        var _repositoryMock = new Mock<IPersonRepository>();
 
-        this.personService = new PersonService(_repository.Object, new Mock<IUnitOfWork>().Object);
+        _repositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(_persons);
 
-        var result = personService.GetAll();
+        personService = new PersonService(_repositoryMock.Object, new Mock<IUnitOfWork>().Object);
+
+        var result = await personService.GetAllAsync();
 
         Assert.True(result.Count() > 0);
     }
 
-    #endregion 
 }

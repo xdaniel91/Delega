@@ -5,7 +5,7 @@ namespace Delega.Api.Interfaces.Repositories;
 public interface ILawyerRepository
 {
     Lawyer Add(Lawyer lawyer);
-    Lawyer GetById(int id);
+    Task<Lawyer> GetByIdAsync(int id);
     IEnumerable<Lawyer> GetAll();
     LawyerResponse GetResponse(int id);
 }
