@@ -5,7 +5,6 @@ using Delega.Api.Models;
 using Delega.Api.Services.Interfaces;
 using Delega.Api.Validators;
 using FluentValidation;
-using System.Threading;
 
 namespace Delega.Api.Services.Implementation;
 

@@ -12,6 +12,9 @@ public interface IJudicialProcessService
     Task<IEnumerable<JudicialProcess>> GetAllAsync();
     JudicialProcessViewModel GetViewModel(int id);
     Task<JudicialProcess> InProgressAsync(int id);
+    Task<JudicialProcess> CreateNewJudicialProcessAsync(JudicialProcessCreateRequest request);
+    Task<Author> CreateNewAuthorAsync(JudicialProcessCreateRequest request);
+    Task<Accused> CreateNewAccusedAsync(JudicialProcessCreateRequest request);
 
 }
 
