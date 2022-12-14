@@ -1,8 +1,4 @@
-﻿using Delega.Api.Database;
-using Delega.Api.Models;
-using Delega.Api.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Delega.Api.Controllers;
 
@@ -10,54 +6,27 @@ namespace Delega.Api.Controllers;
 [ApiController]
 public class PersonController : ControllerBase
 {
-    private readonly IPersonService Service;
-    private readonly IDistributedCache DistributedCache;
-    private readonly DelegaContext Context;
-    public PersonController(IPersonService personService, IDistributedCache distributedCache, DelegaContext context)
+
+    public PersonController()
     {
-        Service = personService;
-        DistributedCache = distributedCache;
-        Context = context;
+
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()
     {
-        var people = await Service.GetAllAsync();
-
-        if (people is null)
-            return NotFound();
-       
-        return Ok(people);
+        return null;
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync(int id)
+    public async Task<IActionResult> GetAsync()
     {
-        var person = await Service.GetByIdAsync(id);
-
-        if (person is null)
-            return NotFound();
-
-        return Ok(person);
+        return null;
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostAsync([FromBody] PersonCreateRequest person)
+    public async Task<IActionResult> PostAsync()
     {
-        try
-        {
-            var ct = HttpContext.RequestAborted;
-            var entity = await Service.AddAsync(person, ct);
-            return Ok(entity);
-        }
-        catch (TaskCanceledException)
-        {
-            return StatusCode(StatusCodes.Status400BadRequest, "Operation cancelled");
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, ex);
-        }
+        return null;
     }
 }

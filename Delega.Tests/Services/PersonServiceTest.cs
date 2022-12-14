@@ -1,11 +1,11 @@
 ﻿using Autofac.Extras.Moq;
-using Delega.Api.Database;
-using Delega.Api.Exceptions;
-using Delega.Api.Interfaces.Repositories;
-using Delega.Api.Models;
-using Delega.Api.Services.Implementation;
-using Delega.Api.Services.Interfaces;
-using Delega.Api.Utils;
+using Delega.Infraestrutura.Database;
+using Delega.Infraestrutura.Exceptions;
+using Delega.Infraestrutura.Interfaces.Repositories;
+using Delega.Infraestrutura.Services.Implementation;
+using Delega.Infraestrutura.Services.Interfaces;
+using Delega.Infraestrutura.Utils;
+using Delega.Dominio.Entities;
 using Moq;
 using Xunit;
 
