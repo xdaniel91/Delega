@@ -14,7 +14,7 @@ public class CountryMigration : Migration
     {
         Create.Table("country")
              .WithColumn("id").AsInt64().PrimaryKey().Identity()
-             .WithColumn("createdtime").AsDateTime().WithDefaultValue(RawSql.Insert("NOW()"))
-             .WithColumn("name").AsString().NotNullable().Unique();
+             .WithColumn("name").AsString(60).NotNullable().Unique()
+             .WithColumn("createdtime").AsDateTime().NotNullable();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Delega.Infraestrutura.Migrations;
 
-[Migration(20221215102723, "Address table")]
+[Migration(20221215174937, "Address table")]
 public class AddressMigration : Migration
 {
     public override void Down()
@@ -15,11 +15,11 @@ public class AddressMigration : Migration
         Create.Table("address")
             .WithColumn("id").AsInt64().PrimaryKey().Identity()
             .WithColumn("street").AsString().NotNullable()
-            .WithColumn("zip_code").AsString().NotNullable().Unique()
-            .WithColumn("district").AsString().NotNullable()
+            .WithColumn("zip_code").AsString(20).NotNullable().Unique()
             .WithColumn("number").AsInt32().Nullable()
-            .WithColumn("createdtime").AsDateTime().WithDefaultValue(RawSql.Insert("NOW()"))
             .WithColumn("additional_information").AsString().Nullable()
-            .WithColumn("id_city").AsInt64().ForeignKey("fk_id_city_address", "city", "id");
+            .WithColumn("district").AsString().NotNullable()
+            .WithColumn("created_at").AsDateTime().WithDefaultValue(DateTime.UtcNow)
+            .WithColumn("id_city").AsInt64().ForeignKey("fk_city_address", "city", "id");
     }
 }

@@ -26,10 +26,11 @@ public class PersonService : IPersonService
     {
         try
         {
-            var personInsert = new Person(personCad.FirstName, personCad.LastName, personCad.Cpf, personCad.BirthDate);
+            var personInsert = new Person(personCad.FirstName, personCad.LastName, personCad.Cpf, personCad.BirthDate, personCad.AddressId);
             await ValidarAsync(personInsert, cancellationToken);
             var insertedPerson = await _personRepository.AddPersonAsync(personInsert, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
+         
             return new PersonResponse
             {
                 AddressId = personInsert.AddressId,

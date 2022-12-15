@@ -12,4 +12,6 @@ public class PersonCreateDTO
     public string Cpf { get; set; }
     [Required]
     public DateTime BirthDate { get; set; }
+    [Required]
+    public long AddressId { get; set; }
 }

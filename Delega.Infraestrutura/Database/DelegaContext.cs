@@ -23,7 +23,7 @@ public class DelegaContext : DbContext
         builder.ApplyConfiguration(new PersonMap());
         builder.ApplyConfiguration(new AddressMap());
         builder.ApplyConfiguration(new CityMap());
-        builder.ApplyConfiguration(new CountryMap());
         builder.ApplyConfiguration(new StateMap());
+        builder.ApplyConfiguration(new CountryMap());
     }
 }
