@@ -16,6 +16,12 @@ public class PersonService : IPersonService
     protected readonly IPersonRepository _personRepository;
     protected readonly IUow _uow;
 
+    public PersonService(IPersonRepository personRepository, IUow uow)
+    {
+        _personRepository = personRepository;
+        _uow = uow;
+    }
+
     public async Task<PersonResponse> AddPersonAsync(PersonCreateDTO personCad, CancellationToken cancellationToken)
     {
         try
@@ -26,11 +32,11 @@ public class PersonService : IPersonService
             var result = await _uow.CommitAsync(cancellationToken);
             return new PersonResponse
             {
-                AddressId = insertedPerson.AddressId,
-                BirthDate = insertedPerson.BirthDate,
-                Cpf = insertedPerson.Cpf,
-                FirstName = insertedPerson.FirstName,
-                LastName = insertedPerson.LastName
+                AddressId = personInsert.AddressId,
+                BirthDate = personInsert.BirthDate,
+                Cpf = personInsert.Cpf,
+                FirstName = personInsert.FirstName,
+                LastName = personInsert.LastName
             };
         }
         catch (Exception)

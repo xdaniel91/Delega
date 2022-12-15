@@ -1,6 +1,4 @@
-﻿using Delega.Infraestrutura.Database;
-
-namespace Delega.Infraestrutura.Database;
+﻿namespace Delega.Infraestrutura.Database;
 
 public class UnitOfWok : IUnitOfWork
 {

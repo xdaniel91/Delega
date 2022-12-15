@@ -1,11 +1,10 @@
 ﻿using Delega.Application.Exceptions;
 using Delega.Dominio.Entities;
 using Delega.Infraestrutura.Database;
-using Delega.Infraestrutura.DTOs.Update;
 using Delega.Infraestrutura.Repositories_Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Delega.Infraestrutura.Repositories.Implementation;
+namespace Delega.Infraestrutura.Repositories_Implementation;
 
 public class PersonRepository : IPersonRepository
 {
