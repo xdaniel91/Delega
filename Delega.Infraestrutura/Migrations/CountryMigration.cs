@@ -13,7 +13,7 @@ public class CountryMigration : Migration
     public override void Up()
     {
         Create.Table("country")
-             .WithColumn("id").AsInt64().PrimaryKey()
+             .WithColumn("id").AsInt64().PrimaryKey().Identity()
              .WithColumn("createdtime").AsDateTime().WithDefaultValue(RawSql.Insert("NOW()"))
              .WithColumn("name").AsString().NotNullable().Unique();
     }

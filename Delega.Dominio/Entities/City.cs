@@ -6,7 +6,7 @@ public class City : EntityBase
     public State State { get; set; }
     public long StateId { get; set; }
 
-    internal City()
+    public City()
     {
 
     }

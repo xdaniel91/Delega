@@ -7,7 +7,6 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDependencyInjection();
 builder.Services.AddFluentMigrator(builder.Configuration);
-builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DelegaContext>(

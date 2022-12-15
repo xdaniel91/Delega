@@ -10,7 +10,7 @@ public class PersonMap : IEntityTypeConfiguration<Person>
     {
         builder.ToTable("person");
         builder.Property(x => x.AddressId).IsRequired().HasColumnName("id_address");
-        builder.HasOne(x => x.Address).WithOne().HasForeignKey<Person>(x => x.AddressId).HasConstraintName("fk_address_person");
+        builder.HasOne(x => x.Address).WithOne().HasForeignKey<Person>(x => x.AddressId);
         builder.Property(x => x.Age).IsRequired().HasColumnName("age");
         builder.Property(x => x.BirthDate).IsRequired().HasColumnName("birth_date");
         builder.Property(x => x.Cpf).IsRequired().HasColumnName("cpf");

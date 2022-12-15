@@ -16,7 +16,6 @@ public class PersonMigration : Migration
         .WithColumn("firstname").AsString().NotNullable()
         .WithColumn("lastname").AsString().NotNullable()
         .WithColumn("cpf").AsFixedLengthString(11).Unique().NotNullable()
-        .WithColumn("birthdate").AsDate().NotNullable()
-        .WithColumn("createdtime").AsDateTime().WithDefaultValue(RawSql.Insert("NOW()"));
+        .WithColumn("birthdate").AsDate().NotNullable();
     }
 }

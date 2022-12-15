@@ -1,6 +1,5 @@
 ﻿using Delega.Infraestrutura.Database.Mapping;
 using Delega.Dominio.Entities;
-using Delega.Infraestrutura.Database.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace Delega.Infraestrutura.Database;
@@ -22,5 +21,9 @@ public class DelegaContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfiguration(new PersonMap());
+        builder.ApplyConfiguration(new AddressMap());
+        builder.ApplyConfiguration(new CityMap());
+        builder.ApplyConfiguration(new CountryMap());
+        builder.ApplyConfiguration(new StateMap());
     }
 }

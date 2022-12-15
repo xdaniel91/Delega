@@ -9,14 +9,13 @@ public static class FluentMigrator
     {
         services.AddFluentMigratorCore()
              .ConfigureRunner(c =>
-        c.AddPostgres11_0()
+        c.AddPostgres()
         .WithGlobalConnectionString(configuration.GetConnectionString("delega.postgres"))
-        .ScanIn(typeof(PersonMigration).Assembly).For.Migrations()
-        .ScanIn(typeof(AddressMigration).Assembly).For.Migrations()
-        .ScanIn(typeof(CityMigration).Assembly).For.Migrations()
-        .ScanIn(typeof(StateMigration).Assembly).For.Migrations()
         .ScanIn(typeof(CountryMigration).Assembly).For.Migrations()
-        .ScanIn(typeof(FeedPersonTable).Assembly).For.Migrations()
+        .ScanIn(typeof(StateMigration).Assembly).For.Migrations()
+        .ScanIn(typeof(CityMigration).Assembly).For.Migrations()
+        .ScanIn(typeof(AddressMigration).Assembly).For.Migrations()
+        .ScanIn(typeof(PersonMigration).Assembly).For.Migrations()
         )
          .AddLogging(lb => lb.AddFluentMigratorConsole())
         .BuildServiceProvider(false);

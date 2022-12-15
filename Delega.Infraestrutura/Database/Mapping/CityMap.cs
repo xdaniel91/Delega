@@ -11,7 +11,7 @@ public class CityMap : IEntityTypeConfiguration<City>
         builder.ToTable("city");
         builder.Property(x => x.Id).HasColumnName("id");
         builder.Property(x => x.StateId).HasColumnName("id_state").IsRequired();
-        builder.HasOne(x => x.State).WithOne().HasForeignKey<City>(x => x.StateId).HasConstraintName("fk_state_city");
+        builder.HasOne(x => x.State).WithOne().HasForeignKey<City>(x => x.StateId);
         builder.Property(x => x.CreatedAt).IsRequired().HasColumnName("created_at").HasDefaultValueSql("NOW()").ValueGeneratedOnAdd();
         builder.Property(x => x.Name).HasColumnName("name").IsRequired().HasMaxLength(59);
     }

@@ -11,4 +11,9 @@ public class State : EntityBase
         Name = name;
         CountryId = countryId;
     }
+
+    public State()
+    {
+
+    }
 }

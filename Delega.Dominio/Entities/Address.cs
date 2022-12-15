@@ -10,7 +10,7 @@ public class Address : EntityBase
     public City City { get; set; }
     public long CityId { get; set; }
 
-    internal Address()
+    public Address()
     {
 
     }

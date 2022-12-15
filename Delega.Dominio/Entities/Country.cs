@@ -8,4 +8,9 @@ public class Country : EntityBase
     {
         Name = name;
     }
+
+    public Country()
+    {
+
+    }
 }
