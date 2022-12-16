@@ -27,22 +27,31 @@ public class CityRepository : ICityRepository
         }
         catch (Exception)
         {
-
             throw;
         }
     }
 
-    public async Task<City> GetCityAsync(long id, CancellationToken cancellationToken)
+    public async Task<City> GetCityAsync(long id, CancellationToken cancellationToken, bool trackObj = false)
     {
         try
         {
-            var result = await Cities.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+            var city = trackObj ? await
 
-            return result is null ? throw new DelegaDataException("City not found") : result;
+                 (from _city in Cities
+                         .Where(x => x.Id == id)
+                         .Include(x => x.State)
+                  select _city).SingleOrDefaultAsync(cancellationToken)
+                             :
+              await (from _state in Cities
+                         .AsNoTracking()
+                         .Where(x => x.Id == id)
+                         .Include(x => x.State)
+                     select _state).SingleOrDefaultAsync(cancellationToken);
+
+            return city is null ? throw new DelegaDataException("City not found") : city;
         }
         catch (Exception)
         {
-
             throw;
         }
     }

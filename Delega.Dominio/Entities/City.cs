@@ -15,5 +15,6 @@ public class City : EntityBase
     {
         Name = name;
         StateId = stateId;
+        CreatedAt = DateTime.UtcNow;
     }
 }

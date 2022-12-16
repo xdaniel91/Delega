@@ -7,5 +7,5 @@ public interface IPersonRepository
 {
     Task<Person> AddPersonAsync(Person person, CancellationToken cancellationToken);
     Task<Person> UpdatePersonAsync(Person personUpdate, CancellationToken cancellationToken);
-    Task<Person> GetPersonAsync(long id, CancellationToken cancellationToken);
+    Task<Person> GetPersonAsync(long id, CancellationToken cancellationToken, bool trackObj = false);
 }

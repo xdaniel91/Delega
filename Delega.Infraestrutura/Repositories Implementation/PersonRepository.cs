@@ -30,11 +30,22 @@ public class PersonRepository : IPersonRepository
         }
     }
 
-    public async Task<Person> GetPersonAsync(long id, CancellationToken cancellationToken)
+    public async Task<Person> GetPersonAsync(long id, CancellationToken cancellationToken, bool trackObj = false)
     {
         try
         {
-            var person = await People.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+            var person = trackObj ? await
+
+                (from _person in People
+                        .Where(x => x.Id == id)
+                        .Include(x => x.Address)
+                 select _person).SingleOrDefaultAsync(cancellationToken)
+                            :
+             await (from _person in People
+                        .AsNoTracking()
+                        .Where(x => x.Id == id)
+                        .Include(x => x.Address)
+                    select _person).SingleOrDefaultAsync(cancellationToken);
 
             return person is null ? throw new DelegaDataException("Person not found") : person;
         }

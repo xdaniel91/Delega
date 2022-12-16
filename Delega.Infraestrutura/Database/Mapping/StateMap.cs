@@ -9,7 +9,7 @@ public class StateMap : IEntityTypeConfiguration<State>
     public void Configure(EntityTypeBuilder<State> builder)
     {
         builder.ToTable("state");
-        builder.Property(x => x.Id).HasColumnName("id").IsRequired();
+        builder.HasKey(x => x.Id).HasName("id");
         builder.Property(x => x.CountryId).IsRequired().HasColumnName("id_country");
         builder.HasOne(x => x.Country).WithOne().HasForeignKey<State>(x => x.CountryId)
             .HasConstraintName("fk_country_state");

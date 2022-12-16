@@ -16,7 +16,6 @@ public class StateMigration : Migration
          .WithColumn("id").AsInt64().PrimaryKey().Identity()
          .WithColumn("id_country").AsInt64().ForeignKey("fk_country_state", "country", "id")
          .WithColumn("created_at").AsDateTime().NotNullable()
-         .WithColumn("name").AsString().NotNullable().Unique()
-         ;
+         .WithColumn("name").AsString().NotNullable().Unique();
     }
 }

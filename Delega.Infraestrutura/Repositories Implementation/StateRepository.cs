@@ -30,11 +30,23 @@ public class StateRepository : IStateRepository
         }
     }
 
-    public async Task<State> GetStateAsync(long id, CancellationToken cancellationToken)
+    public async Task<State> GetStateAsync(long id, CancellationToken cancellationToken, bool trackObj = false)
     {
         try
         {
-            var state = await States.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+            var state = trackObj ? await
+
+                (from _state in States
+                        .Where(x => x.Id == id)
+                        .Include(x => x.Country)
+                 select _state).SingleOrDefaultAsync(cancellationToken)
+                            :
+             await (from _state in States
+                        .AsNoTracking()
+                        .Where(x => x.Id == id)
+                        .Include(x => x.Country)
+                    select _state).SingleOrDefaultAsync(cancellationToken);
 
             return state is null ? throw new DelegaDataException("State not found") : state;
         }

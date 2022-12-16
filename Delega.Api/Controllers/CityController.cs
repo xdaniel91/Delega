@@ -1,30 +1,30 @@
-﻿using Delega.Application.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Update;
 using Delega.Infraestrutura.Services_Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using Delega.Application.Exceptions;
 
 namespace Delega.Api.Controllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
-public class PersonController : ControllerBase
+public class CityController : ControllerBase
 {
-    private readonly IPersonService _personService;
+    private readonly ICityService _cityService;
 
-    public PersonController(IPersonService personService)
+    public CityController(ICityService cityService)
     {
-        _personService = personService;
+        _cityService = cityService;
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetPersonAsync([FromQuery] long id)
+    public async Task<IActionResult> GetCityAsync([FromQuery] long id)
     {
         var cancellationToken = HttpContext.RequestAborted;
 
         try
         {
-            var result = await _personService.GetPersonAsync(id, cancellationToken);
+            var result = await _cityService.GetCityAsync(id, cancellationToken);
             return Ok(result);
         }
         catch (DelegaDataException de)
@@ -38,13 +38,13 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddPersonAsync([FromBody] PersonCreateDTO createDto)
+    public async Task<IActionResult> AddCityAsync([FromBody] CityCreateDTO createDto)
     {
         var cancellationToken = HttpContext.RequestAborted;
 
         try
         {
-            var result = await _personService.AddPersonAsync(createDto, cancellationToken);
+            var result = await _cityService.AddCityAsync(createDto, cancellationToken);
             return Ok(result);
         }
         catch (DelegaDataException de)
@@ -58,13 +58,13 @@ public class PersonController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdatePersonAsync([FromBody] PersonUpdateDTO updateDto)
+    public async Task<IActionResult> UpdateCityAsync([FromBody] CityUpdateDTO updateDto)
     {
         var cancellationToken = HttpContext.RequestAborted;
 
         try
         {
-            var result = await _personService.UpdatePersonAsync(updateDto, cancellationToken);
+            var result = await _cityService.UpdateCityAsync(updateDto, cancellationToken);
             return Ok(result);
         }
         catch (DelegaDataException de)

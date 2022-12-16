@@ -10,6 +10,7 @@ public class State : EntityBase
     {
         Name = name;
         CountryId = countryId;
+        CreatedAt = DateTime.UtcNow;
     }
 
     public State()

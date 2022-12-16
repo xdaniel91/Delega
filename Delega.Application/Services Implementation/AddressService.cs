@@ -14,11 +14,12 @@ public class AddressService : IAddressService
 {
     protected readonly IAddressRepository _addressRepository;
     protected readonly IUow _uow;
-
     protected readonly AddressValidator _addressvalidator = new AddressValidator();
-    public AddressService(IAddressRepository addressRepository)
+
+    public AddressService(IAddressRepository addressRepository, IUow uow)
     {
         _addressRepository = addressRepository;
+        _uow = uow;
     }
 
     public async Task<AddressResponse> AddAddressAsync(AddressCreateDTO addressCad, CancellationToken cancellationToken)
@@ -26,13 +27,8 @@ public class AddressService : IAddressService
         try
         {
             var addressInsert = new Address(addressCad.Street, addressCad.District, addressCad.ZipCode, addressCad.Number, addressCad.AdditionalInformation, addressCad.CityId);
-
-            var valitionResult = await _addressvalidator.ValidateAsync(addressInsert, cancellationToken);
-
             await ValidarAsync(addressInsert, cancellationToken);
-
             var insertedAddress = await _addressRepository.AddAddressAsync(addressInsert, cancellationToken);
-
             var result = await _uow.CommitAsync(cancellationToken);
 
             return await GetAddressAsync(insertedAddress.Id, cancellationToken);
@@ -69,7 +65,7 @@ public class AddressService : IAddressService
     {
         try
         {
-            var address = await _addressRepository.GetAddressAsync(addressUpdate.Id, cancellationToken);
+            var address = await _addressRepository.GetAddressAsync(addressUpdate.Id, cancellationToken, true);
 
             if (addressUpdate.District != null)
                 address.District = addressUpdate.District;
@@ -91,15 +87,7 @@ public class AddressService : IAddressService
             var updatedAddress = await _addressRepository.UpdateAddressAsync(address, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
 
-            return new AddressResponse
-            {
-                AdditionalInformation = updatedAddress.AdditionalInformation,
-                City = updatedAddress.City.Name,
-                District = updatedAddress.District,
-                Number = updatedAddress.Number,
-                Street = updatedAddress.Street,
-                ZipCode = updatedAddress.ZipCode
-            };
+            return await GetAddressAsync(addressUpdate.Id, cancellationToken);
         }
         catch (Exception)
         {

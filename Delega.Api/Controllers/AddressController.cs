@@ -5,26 +5,25 @@ using Delega.Infraestrutura.Services_Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delega.Api.Controllers;
-
 [Route("[controller]")]
 [ApiController]
-public class PersonController : ControllerBase
+public class AddressController : Controller
 {
-    private readonly IPersonService _personService;
+    private readonly IAddressService _addressService;
 
-    public PersonController(IPersonService personService)
+    public AddressController(IAddressService AddressService)
     {
-        _personService = personService;
+        _addressService = AddressService;
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetPersonAsync([FromQuery] long id)
+    public async Task<IActionResult> GetAddressAsync([FromQuery] long id)
     {
         var cancellationToken = HttpContext.RequestAborted;
 
         try
         {
-            var result = await _personService.GetPersonAsync(id, cancellationToken);
+            var result = await _addressService.GetAddressAsync(id, cancellationToken);
             return Ok(result);
         }
         catch (DelegaDataException de)
@@ -38,13 +37,13 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddPersonAsync([FromBody] PersonCreateDTO createDto)
+    public async Task<IActionResult> AddAddressAsync([FromBody] AddressCreateDTO createDto)
     {
         var cancellationToken = HttpContext.RequestAborted;
 
         try
         {
-            var result = await _personService.AddPersonAsync(createDto, cancellationToken);
+            var result = await _addressService.AddAddressAsync(createDto, cancellationToken);
             return Ok(result);
         }
         catch (DelegaDataException de)
@@ -58,13 +57,13 @@ public class PersonController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdatePersonAsync([FromBody] PersonUpdateDTO updateDto)
+    public async Task<IActionResult> UpdateAddressAsync([FromBody] AddressUpdateDTO updateDto)
     {
         var cancellationToken = HttpContext.RequestAborted;
 
         try
         {
-            var result = await _personService.UpdatePersonAsync(updateDto, cancellationToken);
+            var result = await _addressService.UpdateAddressAsync(updateDto, cancellationToken);
             return Ok(result);
         }
         catch (DelegaDataException de)

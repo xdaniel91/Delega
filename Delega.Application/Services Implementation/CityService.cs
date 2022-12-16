@@ -16,6 +16,13 @@ public class CityService : ICityService
     protected readonly ICityRepository _cityRepository;
     protected readonly IUow _uow;
 
+    public CityService(ICityRepository cityRepository, IUow uow)
+    {
+        _cityRepository = cityRepository;
+        _uow = uow;
+    }
+
+
     public async Task<CityResponse> AddCityAsync(CityCreateDTO cityCad, CancellationToken cancellationToken)
     {
         try
@@ -26,13 +33,8 @@ public class CityService : ICityService
            
             var insertedCity = await _cityRepository.AddCityAsync(cityInsert, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
-          
-            return new CityResponse
-            {
-                Name = insertedCity.Name,
-                State = insertedCity.State.Name,
-                StateId = insertedCity.StateId
-            };
+
+            return await GetCityAsync(insertedCity.Id, cancellationToken);
         }
         catch (Exception)
         {
@@ -63,7 +65,7 @@ public class CityService : ICityService
     {
         try
         {
-            var city = await _cityRepository.GetCityAsync(cityUpdate.Id, cancellationToken);
+            var city = await _cityRepository.GetCityAsync(cityUpdate.Id, cancellationToken, true);
 
             if (cityUpdate.Name != null)
                 city.Name = cityUpdate.Name;
@@ -73,13 +75,8 @@ public class CityService : ICityService
             var updatedCity = await _cityRepository.UpdateCityAsync(city, cancellationToken);
 
             var result = await _uow.CommitAsync(cancellationToken);
-            
-            return new CityResponse
-            {
-                Name = updatedCity.Name,
-                State = updatedCity.State.Name,
-                StateId = updatedCity.StateId
-            };
+
+            return await GetCityAsync(cityUpdate.Id, cancellationToken);
         }
         catch (Exception)
         {

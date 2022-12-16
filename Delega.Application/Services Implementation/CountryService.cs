@@ -15,6 +15,12 @@ public class CountryService : ICountryService
     protected readonly ICountryRepository _countryRepository;
     protected readonly IUow _uow;
 
+    public CountryService(ICountryRepository repository, IUow uow)
+    {
+        _countryRepository = repository;
+        _uow = uow;
+    }
+
     public async Task<CountryResponse> AddCountryAsync(CountryCreateDTO countryCad, CancellationToken cancellationToken)
     {
         try
@@ -31,7 +37,6 @@ public class CountryService : ICountryService
         }
         catch (Exception)
         {
-
             throw;
         }
     }
@@ -57,7 +62,7 @@ public class CountryService : ICountryService
     {
         try
         {
-            var country = await _countryRepository.GetCountryAsync(countryUpdate.Id, cancellationToken);
+            var country = await _countryRepository.GetCountryAsync(countryUpdate.Id, cancellationToken, true);
 
             if (countryUpdate.Name != null)
                 country.Name = countryUpdate.Name;
@@ -67,10 +72,7 @@ public class CountryService : ICountryService
             var updatedCountry = await _countryRepository.UpdateCountryAsync(country, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
 
-            return new CountryResponse
-            {
-                Name = updatedCountry.Name
-            };
+            return await GetCountryAsync(countryUpdate.Id, cancellationToken);
         }
         catch (Exception)
         {

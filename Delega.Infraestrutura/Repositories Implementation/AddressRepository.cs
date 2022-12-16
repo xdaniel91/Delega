@@ -31,17 +31,29 @@ public class AddressRepository : IAddressRepository
         }
     }
 
-    public async Task<Address> GetAddressAsync(long id, CancellationToken cancellationToken)
+    public async Task<Address> GetAddressAsync(long id, CancellationToken cancellationToken, bool trackObj = false)
     {
         try
         {
             var result = await Addresses.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-            return result is null ? throw new DelegaDataException("Address not found") : result;
+            var address = trackObj ? await
+
+                (from _address in Addresses
+                        .Where(x => x.Id == id)
+                        .Include(x => x.City)
+                select _address).SingleOrDefaultAsync(cancellationToken)
+                            :
+             await (from _address in Addresses
+                        .AsNoTracking()
+                        .Where(x => x.Id == id)
+                        .Include(x => x.City)
+            select _address).SingleOrDefaultAsync(cancellationToken);
+
+            return address is null ? throw new DelegaDataException("Address not found") : address;
         }
         catch (Exception)
         {
-
             throw;
         }
     }

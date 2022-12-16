@@ -15,6 +15,6 @@ public class CountryMigration : Migration
         Create.Table("country")
              .WithColumn("id").AsInt64().PrimaryKey().Identity()
              .WithColumn("name").AsString(60).NotNullable().Unique()
-             .WithColumn("createdtime").AsDateTime().NotNullable();
+             .WithColumn("created_at").AsDateTime().NotNullable();
     }
 }

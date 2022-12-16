@@ -13,12 +13,11 @@ public class PersonMigration : Migration
     {
         Create.Table("person")
         .WithColumn("id").AsInt64().PrimaryKey().Identity()
-        .WithColumn("id_address").AsInt64().ForeignKey("fk_address_person", "address", "id")
-        .WithColumn("firstname").AsString().NotNullable()
-        .WithColumn("lastname").AsString().NotNullable()
+        .WithColumn("first_name").AsString().NotNullable()
+        .WithColumn("last_name").AsString().NotNullable()
         .WithColumn("cpf").AsFixedLengthString(11).Unique().NotNullable()
         .WithColumn("age").AsInt32().NotNullable()
         .WithColumn("birth_date").AsDate().NotNullable()
-        .WithColumn("created_at").AsDate().NotNullable();
+        .WithColumn("created_at").AsDateTime().NotNullable();
     }
 }

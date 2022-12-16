@@ -7,6 +7,7 @@ public class Country : EntityBase
     public Country(string name)
     {
         Name = name;
+        CreatedAt = DateTime.UtcNow;
     }
 
     public Country()

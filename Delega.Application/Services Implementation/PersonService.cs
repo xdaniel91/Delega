@@ -71,7 +71,7 @@ public class PersonService : IPersonService
     {
         try
         {
-            var person = await _personRepository.GetPersonAsync(personUpdate.Id, cancellationToken);
+            var person = await _personRepository.GetPersonAsync(personUpdate.Id, cancellationToken, true);
 
             if (personUpdate.FirstName != null)
                 person.FirstName = personUpdate.FirstName;
@@ -91,14 +91,7 @@ public class PersonService : IPersonService
 
             var result = await _uow.CommitAsync(cancellationToken);
 
-            return new PersonResponse
-            {
-                BirthDate = updatedPerson.BirthDate,
-                Cpf = updatedPerson.Cpf,
-                AddressId = updatedPerson.AddressId,
-                FirstName = updatedPerson.FirstName,
-                LastName = updatedPerson.LastName,
-            };
+            return await GetPersonAsync(personUpdate.Id, cancellationToken);
         }
         catch (Exception)
         {

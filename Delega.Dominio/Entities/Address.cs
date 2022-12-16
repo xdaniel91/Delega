@@ -23,5 +23,6 @@ public class Address : EntityBase
         Number = number;
         AdditionalInformation = additionalInformation;
         CityId = cityId;
+        CreatedAt = DateTime.UtcNow;
     }
 }

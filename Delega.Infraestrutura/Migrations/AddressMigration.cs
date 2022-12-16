@@ -19,7 +19,7 @@ public class AddressMigration : Migration
             .WithColumn("number").AsInt32().Nullable()
             .WithColumn("additional_information").AsString().Nullable()
             .WithColumn("district").AsString().NotNullable()
-            .WithColumn("created_at").AsDateTime().WithDefaultValue(DateTime.UtcNow)
+            .WithColumn("created_at").AsDateTime().NotNullable()
             .WithColumn("id_city").AsInt64().ForeignKey("fk_city_address", "city", "id");
     }
 }

@@ -31,11 +31,20 @@ public class CountryRepository : ICountryRepository
         }
     }
 
-    public async Task<Country> GetCountryAsync(long id, CancellationToken cancellationToken)
+    public async Task<Country> GetCountryAsync(long id, CancellationToken cancellationToken, bool trackObj)
     {
         try
         {
-            var country = await Countries.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+            var country = trackObj ? await
+
+                 (from _state in Countries
+                         .Where(x => x.Id == id)
+                  select _state).SingleOrDefaultAsync(cancellationToken)
+                             :
+              await (from _state in Countries
+                         .AsNoTracking()
+                         .Where(x => x.Id == id)
+                     select _state).SingleOrDefaultAsync(cancellationToken);
 
             return country is null ? throw new DelegaDataException("Country not found") : country;
         }
