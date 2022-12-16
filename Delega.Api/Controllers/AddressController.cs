@@ -5,7 +5,8 @@ using Delega.Infraestrutura.Services_Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Delega.Api.Controllers;
-[Route("[controller]")]
+
+[Route("api/[controller]")]
 [ApiController]
 public class AddressController : Controller
 {
