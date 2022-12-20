@@ -18,7 +18,7 @@ public class AddressController : Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAddressAsync([FromQuery] long id)
+    public async Task<IActionResult> GetAddressAsync(long id)
     {
         var cancellationToken = HttpContext.RequestAborted;
 

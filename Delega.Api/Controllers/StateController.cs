@@ -18,7 +18,7 @@ public class StateController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetStateAsync([FromQuery] long id)
+    public async Task<IActionResult> GetStateAsync(long id)
     {
         var cancellationToken = HttpContext.RequestAborted;
 

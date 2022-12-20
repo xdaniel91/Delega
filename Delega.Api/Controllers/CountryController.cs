@@ -18,7 +18,7 @@ public class CountryController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetCountryAsync([FromQuery] long id)
+    public async Task<IActionResult> GetCountryAsync(long id)
     {
         var cancellationToken = HttpContext.RequestAborted;
 

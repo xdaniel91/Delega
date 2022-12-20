@@ -58,7 +58,7 @@ public class PersonRepository : IPersonRepository
     public async Task<Person> UpdatePersonAsync(Person person, CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)
-            throw new DelegaDataException("Request cancelled");
+            throw new OperationCanceledException("Request cancelled");
 
         try
         {

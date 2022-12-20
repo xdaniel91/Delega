@@ -18,7 +18,7 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetPersonAsync([FromQuery] long id)
+    public async Task<IActionResult> GetPersonAsync(long id)
     {
         var cancellationToken = HttpContext.RequestAborted;
 
@@ -29,7 +29,7 @@ public class PersonController : ControllerBase
         }
         catch (DelegaDataException de)
         {
-            return BadRequest(de.Message);
+            return NotFound(de.Message);
         }
         catch (Exception ex)
         {
@@ -51,13 +51,17 @@ public class PersonController : ControllerBase
         {
             return BadRequest(de.Message);
         }
+        catch (DelegaApplicationException ae)
+        {
+            return BadRequest(ae.Message);
+        }
         catch (Exception ex)
         {
             return StatusCode(500, ex.Message);
         }
     }
 
-    [HttpPut]
+    [HttpPatch]
     public async Task<IActionResult> UpdatePersonAsync([FromBody] PersonUpdateDTO updateDto)
     {
         var cancellationToken = HttpContext.RequestAborted;
@@ -66,6 +70,10 @@ public class PersonController : ControllerBase
         {
             var result = await _personService.UpdatePersonAsync(updateDto, cancellationToken);
             return Ok(result);
+        }
+        catch (DelegaApplicationException ae)
+        {
+            return BadRequest(ae.Message);
         }
         catch (DelegaDataException de)
         {
