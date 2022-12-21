@@ -1,6 +1,5 @@
-﻿using Delega.Application.Exceptions;
-using Delega.Application.Repositories_Interfaces;
-using Delega.Dominio.Entities;
+﻿using Delega.Application.Repositories_Interfaces;
+using Delega.Dominio.Factories;
 using Delega.Dominio.Validators;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Response;
@@ -26,8 +25,7 @@ public class PersonService : IPersonService
     {
         try
         {
-            var personInsert = new Person(personCad.FirstName, personCad.LastName, personCad.Cpf, personCad.BirthDate, personCad.AddressId);
-            await ValidarAsync(personInsert, cancellationToken);
+            var personInsert = await PersonFactory.CreateAsync(personCad.FirstName, personCad.LastName, personCad.Cpf, personCad.BirthDate, personCad.AddressId);
             var insertedPerson = await _personRepository.AddPersonAsync(personInsert, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
          
@@ -73,22 +71,8 @@ public class PersonService : IPersonService
         {
             var person = await _personRepository.GetPersonAsync(personUpdate.Id, cancellationToken, true);
 
-            if (personUpdate.FirstName != null)
-                person.FirstName = personUpdate.FirstName;
-
-            if (personUpdate.LastName != null)
-                person.LastName = personUpdate.LastName;
-
-            if (personUpdate.Cpf != null)
-                person.Cpf = personUpdate.Cpf;
-
-            if (personUpdate.BirthDate != null)
-                person.BirthDate = personUpdate.BirthDate.Value;
-
-            await ValidarAsync(person, cancellationToken);
-
+            await person.UpdateAsync(personUpdate.FirstName, personUpdate.LastName, personUpdate.Cpf, personUpdate.BirthDate, cancellationToken);     
             var updatedPerson = await _personRepository.UpdatePersonAsync(person, cancellationToken);
-
             var result = await _uow.CommitAsync(cancellationToken);
 
             return await GetPersonAsync(personUpdate.Id, cancellationToken);
@@ -96,18 +80,6 @@ public class PersonService : IPersonService
         catch (Exception)
         {
             throw;
-        }
-    }
-
-    private async Task ValidarAsync(Person person, CancellationToken cancellationToken)
-    {
-        var valitionResult = await _personValidator.ValidateAsync(person, cancellationToken);
-
-        if (!valitionResult.IsValid)
-        {
-            var errors = valitionResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
-            var errorsString = string.Join(", ", errors);
-            throw new DelegaApplicationException(errorsString);
         }
     }
 }

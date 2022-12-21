@@ -1,6 +1,5 @@
-﻿using Delega.Application.Exceptions;
-using Delega.Application.Repositories_Interfaces;
-using Delega.Dominio.Entities;
+﻿using Delega.Application.Repositories_Interfaces;
+using Delega.Dominio.Factories;
 using Delega.Dominio.Validators;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Response;
@@ -27,10 +26,7 @@ public class CityService : ICityService
     {
         try
         {
-            var cityInsert = new City(cityCad.Name, cityCad.StateId);
-          
-            await ValidarAsync(cityInsert, cancellationToken);
-           
+            var cityInsert = await CityFactory.CreateAsync(cityCad.Name, cityCad.StateId); 
             var insertedCity = await _cityRepository.AddCityAsync(cityInsert, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
 
@@ -66,14 +62,7 @@ public class CityService : ICityService
         try
         {
             var city = await _cityRepository.GetCityAsync(cityUpdate.Id, cancellationToken, true);
-
-            if (cityUpdate.Name != null)
-                city.Name = cityUpdate.Name;
-
-            await ValidarAsync(city, cancellationToken);
-            
             var updatedCity = await _cityRepository.UpdateCityAsync(city, cancellationToken);
-
             var result = await _uow.CommitAsync(cancellationToken);
 
             return await GetCityAsync(cityUpdate.Id, cancellationToken);
@@ -84,15 +73,4 @@ public class CityService : ICityService
         }
     }
 
-    private async Task ValidarAsync(City city, CancellationToken cancellationToken)
-    {
-        var valitionResult = await _cityValidator.ValidateAsync(city, cancellationToken);
-
-        if (!valitionResult.IsValid)
-        {
-            var errors = valitionResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
-            var errorsString = string.Join(", ", errors);
-            throw new DelegaApplicationException(errorsString);
-        }
-    }
 }

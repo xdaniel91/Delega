@@ -1,4 +1,4 @@
-﻿using Delega.Application.Exceptions;
+﻿using Delega.Dominio.Exceptions;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Update;
 using Delega.Infraestrutura.Services_Interfaces;
@@ -31,6 +31,10 @@ public class PersonController : ControllerBase
         {
             return NotFound(de.Message);
         }
+        catch (DelegaDomainException de)
+        {
+            return BadRequest(de.Message);
+        }
         catch (Exception ex)
         {
             return StatusCode(500, ex.Message);
@@ -51,9 +55,9 @@ public class PersonController : ControllerBase
         {
             return BadRequest(de.Message);
         }
-        catch (DelegaApplicationException ae)
+        catch (DelegaDomainException de)
         {
-            return BadRequest(ae.Message);
+            return BadRequest(de.Message);
         }
         catch (Exception ex)
         {
@@ -71,9 +75,9 @@ public class PersonController : ControllerBase
             var result = await _personService.UpdatePersonAsync(updateDto, cancellationToken);
             return Ok(result);
         }
-        catch (DelegaApplicationException ae)
+        catch (DelegaDomainException de)
         {
-            return BadRequest(ae.Message);
+            return BadRequest(de.Message);
         }
         catch (DelegaDataException de)
         {

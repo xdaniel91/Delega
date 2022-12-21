@@ -56,7 +56,7 @@ public class PersonControllerIntegragationTest : IClassFixture<WebApplicationFac
         {
             AddressId = 1,
             BirthDate = DateTime.Today.AddYears(-35),
-            Cpf = "15915915915",
+            Cpf = "18666666666",
             FirstName = "pingu",
             LastName = "aluisio"
         };
@@ -64,9 +64,6 @@ public class PersonControllerIntegragationTest : IClassFixture<WebApplicationFac
         //Act
         var personJson = JsonContent.Create(personInsert);
         var response = await _client.PostAsync(baseUrl, personJson);
-        var personString = await response.Content.ReadAsStringAsync();
-        var personInserted = JsonConvert.DeserializeObject<Person>(personString);
-        Assert.Equal(personInserted?.Cpf, personInsert.Cpf);
         Assert.Equal(200, (int)response.StatusCode);
     }
 

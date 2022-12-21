@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Update;
-using Delega.Application.Exceptions;
 using Delega.Infraestrutura.Services_Interfaces;
+using Delega.Dominio.Exceptions;
 
 namespace Delega.Api.Controllers;
 

@@ -3,12 +3,10 @@ using FluentValidation;
 
 namespace Delega.Dominio.Validators;
 
-internal class CountryValidator : AbstractValidator<Country>
+public class CountryValidator : AbstractValidator<Country>
 {
     public CountryValidator()
     {
-        RuleFor(x => x.Name)
-            .NotEmpty()
-            .Length(3, 90);
+        RuleFor(x => x.Name).NotEmpty();
     }
 }

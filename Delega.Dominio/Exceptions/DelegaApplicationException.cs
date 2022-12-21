@@ -1,4 +1,4 @@
-﻿namespace Delega.Application.Exceptions;
+﻿namespace Delega.Dominio.Exceptions;
 
 public class DelegaApplicationException : Exception
 {

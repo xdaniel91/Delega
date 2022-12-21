@@ -2,7 +2,7 @@
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Update;
 using Delega.Infraestrutura.Services_Interfaces;
-using Delega.Application.Exceptions;
+using Delega.Dominio.Exceptions;
 
 namespace Delega.Api.Controllers;
 

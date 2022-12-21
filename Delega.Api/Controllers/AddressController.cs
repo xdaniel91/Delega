@@ -1,4 +1,4 @@
-﻿using Delega.Application.Exceptions;
+﻿using Delega.Dominio.Exceptions;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Update;
 using Delega.Infraestrutura.Services_Interfaces;

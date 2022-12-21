@@ -1,6 +1,5 @@
-﻿using Delega.Application.Exceptions;
-using Delega.Application.Repositories_Interfaces;
-using Delega.Dominio.Entities;
+﻿using Delega.Application.Repositories_Interfaces;
+using Delega.Dominio.Factories;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Response;
 using Delega.Infraestrutura.DTOs.Update;
@@ -11,7 +10,6 @@ namespace Delega.Infraestrutura.Services_Implementation;
 
 public class CountryService : ICountryService
 {
-    private readonly CountryValidator _countryValidator = new CountryValidator();
     protected readonly ICountryRepository _countryRepository;
     protected readonly IUow _uow;
 
@@ -25,8 +23,7 @@ public class CountryService : ICountryService
     {
         try
         {
-            var countryInsert = new Country(countryCad.Name);
-            await ValidarAsync(countryInsert, cancellationToken);
+            var countryInsert = await CountryFactory.CreateAsync(countryCad.Name);
             var insertedCountry = await _countryRepository.AddCountryAsync(countryInsert, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
 
@@ -53,7 +50,6 @@ public class CountryService : ICountryService
         }
         catch (Exception)
         {
-
             throw;
         }
     }
@@ -63,12 +59,7 @@ public class CountryService : ICountryService
         try
         {
             var country = await _countryRepository.GetCountryAsync(countryUpdate.Id, cancellationToken, true);
-
-            if (countryUpdate.Name != null)
-                country.Name = countryUpdate.Name;
-
-            await ValidarAsync(country, cancellationToken);
-
+            await country.UpdateAsync(countryUpdate.Name, cancellationToken);
             var updatedCountry = await _countryRepository.UpdateCountryAsync(country, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
 
@@ -81,15 +72,4 @@ public class CountryService : ICountryService
         }
     }
 
-    private async Task ValidarAsync(Country country, CancellationToken cancellationToken)
-    {
-        var valitionResult = await _countryValidator.ValidateAsync(country, cancellationToken);
-
-        if (!valitionResult.IsValid)
-        {
-            var errors = valitionResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
-            var errorsString = string.Join(", ", errors);
-            throw new DelegaApplicationException(errorsString);
-        }
-    }
 }

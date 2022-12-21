@@ -1,11 +1,12 @@
-﻿using Moq;
-using Xunit;
-using Delega.Infraestrutura.Services_Interfaces;
+﻿using Delega.Application.Repositories_Interfaces;
+using Delega.Dominio.Entities;
+using Delega.Dominio.Exceptions;
+using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.Repositories_Interfaces;
 using Delega.Infraestrutura.Services_Implementation;
-using Delega.Application.Repositories_Interfaces;
-using Delega.Infraestrutura.DTOs;
-using Delega.Application.Exceptions;
+using Delega.Infraestrutura.Services_Interfaces;
+using Moq;
+using Xunit;
 
 namespace Delega.Tests.Services;
 public class PersonServiceTest
@@ -30,7 +31,7 @@ public class PersonServiceTest
     [InlineData("Karthus", "Anivia", "", "1999-02-05")]
     [InlineData("Karthus", "Anivia", null, "1999-02-05")]
     [InlineData("Karthus", "Anivia", "14429933081", "2020-02-05")]
-    public async Task CreatePerson_ThrowsException(string firstname, string lastname, string cpf, string birth)
+    public async Task CreatePerson_ThrowsExceptionInvalidFields(string firstname, string lastname, string cpf, string birth)
     {
         //ARRANGE
         var personCad = new PersonCreateDTO
@@ -43,11 +44,11 @@ public class PersonServiceTest
         var cancellationToken = new CancellationToken();
 
         //ACT
-        var ex = await Assert.ThrowsAsync<DelegaApplicationException>(async () => await 
+        var ex = await Assert.ThrowsAsync<DelegaDomainException>(async () => await
         personService.AddPersonAsync(personCad, cancellationToken));
 
         //ASSERT
-        Assert.True(ex is DelegaApplicationException);
+        Assert.True(ex is DelegaDomainException);
     }
 
 
@@ -66,13 +67,15 @@ public class PersonServiceTest
 
         //ACT
         var insertedPerson = await personService.AddPersonAsync(personCad, cancellationToken);
-       
+
         var isEqual =
-            personCad.FirstName.Equals(insertedPerson.FirstName) 
-            && personCad.LastName.Equals(insertedPerson.LastName) 
+            personCad.FirstName.Equals(insertedPerson.FirstName)
+            && personCad.LastName.Equals(insertedPerson.LastName)
             && personCad.BirthDate.Equals(insertedPerson.BirthDate);
 
         //ASSERT
         Assert.True(isEqual);
     }
+
+
 }

@@ -1,7 +1,5 @@
-﻿using Delega.Application.Exceptions;
-using Delega.Application.Repositories_Interfaces;
-using Delega.Dominio.Entities;
-using Delega.Dominio.Validators;
+﻿using Delega.Application.Repositories_Interfaces;
+using Delega.Dominio.Factories;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Response;
 using Delega.Infraestrutura.DTOs.Update;
@@ -12,13 +10,12 @@ namespace Delega.Infraestrutura.Services_Implementation;
 
 public class StateService : IStateService
 {
-    private readonly StateValidator _stateValidator = new StateValidator();
-    protected readonly IStateRepository _addressRepository;
+    protected readonly IStateRepository _stateRepository;
     protected readonly IUow _uow;
 
-    public StateService(IStateRepository addressRepository, IUow uow)
+    public StateService(IStateRepository stateRepository, IUow uow)
     {
-        _addressRepository = addressRepository;
+        _stateRepository = stateRepository;
         _uow = uow;
     }
 
@@ -26,9 +23,8 @@ public class StateService : IStateService
     {
         try
         {
-            var stateInsert = new State(stateCad.Name, stateCad.CountryId);
-            await ValidarAsync(stateInsert, cancellationToken);
-            var insertedState = await _addressRepository.AddStateAsync(stateInsert, cancellationToken);
+            var stateInsert = await StateFactory.CreateAsync(stateCad.Name, stateCad.CountryId);
+            var insertedState = await _stateRepository.AddStateAsync(stateInsert, cancellationToken);
             await _uow.CommitAsync(cancellationToken);
 
             return await GetStateAsync(insertedState.Id, cancellationToken);
@@ -43,7 +39,7 @@ public class StateService : IStateService
     {
         try
         {
-            var state = await _addressRepository.GetStateAsync(id, cancellationToken);
+            var state = await _stateRepository.GetStateAsync(id, cancellationToken);
 
             return new StateResponse
             {
@@ -62,15 +58,9 @@ public class StateService : IStateService
     {
         try
         {
-            var state = await _addressRepository.GetStateAsync(stateUpdate.Id, cancellationToken, true);
-
-            if (stateUpdate.Name != null)
-                state.Name = stateUpdate.Name;
-
-            await ValidarAsync(state, cancellationToken);
-
-            var updatedState = await _addressRepository.UpdateStateAsync(state, cancellationToken);
-
+            var state = await _stateRepository.GetStateAsync(stateUpdate.Id, cancellationToken, true);
+            await state.UpdateAsync(stateUpdate.Name, cancellationToken);
+            var updatedState = await _stateRepository.UpdateStateAsync(state, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
 
             return await GetStateAsync(stateUpdate.Id, cancellationToken);
@@ -78,18 +68,6 @@ public class StateService : IStateService
         catch (Exception)
         {
             throw;
-        }
-    }
-
-    private async Task ValidarAsync(State state, CancellationToken cancellationToken)
-    {
-        var valitionResult = await _stateValidator.ValidateAsync(state, cancellationToken);
-
-        if (!valitionResult.IsValid)
-        {
-            var errors = valitionResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
-            var errorsString = string.Join(",", errors);
-            throw new DelegaApplicationException(errorsString);
         }
     }
 }

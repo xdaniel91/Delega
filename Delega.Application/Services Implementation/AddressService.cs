@@ -1,6 +1,5 @@
-﻿using Delega.Application.Exceptions;
-using Delega.Application.Repositories_Interfaces;
-using Delega.Dominio.Entities;
+﻿using Delega.Application.Repositories_Interfaces;
+using Delega.Dominio.Factories;
 using Delega.Dominio.Validators;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Response;
@@ -26,8 +25,11 @@ public class AddressService : IAddressService
     {
         try
         {
-            var addressInsert = new Address(addressCad.Street, addressCad.District, addressCad.ZipCode, addressCad.Number, addressCad.AdditionalInformation, addressCad.CityId);
-            await ValidarAsync(addressInsert, cancellationToken);
+            var addressInsert = await AddressFactory.CreateAsync(addressCad.Street,
+                addressCad.District, addressCad.ZipCode,
+                addressCad.Number, addressCad.AdditionalInformation, 
+                addressCad.CityId);
+
             var insertedAddress = await _addressRepository.AddAddressAsync(addressInsert, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
 
@@ -67,22 +69,9 @@ public class AddressService : IAddressService
         {
             var address = await _addressRepository.GetAddressAsync(addressUpdate.Id, cancellationToken, true);
 
-            if (addressUpdate.District != null)
-                address.District = addressUpdate.District;
-
-            if (addressUpdate.Street != null)
-                address.Street = addressUpdate.Street;
-
-            if (addressUpdate.AdditionalInformation != null)
-                address.AdditionalInformation = addressUpdate.AdditionalInformation;
-
-            if (addressUpdate.Number != null)
-                address.Number = addressUpdate.Number;
-
-            if (addressUpdate.ZipCode != null)
-                address.ZipCode = addressUpdate.ZipCode;
-
-            await ValidarAsync(address, cancellationToken);
+            await address.UpdateAsync(addressUpdate.District, 
+                addressUpdate.Street, addressUpdate.AdditionalInformation, 
+                addressUpdate.Number, addressUpdate.ZipCode, cancellationToken);
 
             var updatedAddress = await _addressRepository.UpdateAddressAsync(address, cancellationToken);
             var result = await _uow.CommitAsync(cancellationToken);
@@ -95,15 +84,4 @@ public class AddressService : IAddressService
         }
     }
 
-    private async Task ValidarAsync(Address address, CancellationToken cancellationToken)
-    {
-        var valitionResult = await _addressvalidator.ValidateAsync(address, cancellationToken);
-
-        if (!valitionResult.IsValid)
-        {
-            var errors = valitionResult.Errors.Select(sl => sl.ErrorMessage).ToArray();
-            var errorsString = string.Join(",", errors);
-            throw new DelegaApplicationException(errorsString);
-        }
-    }
 }

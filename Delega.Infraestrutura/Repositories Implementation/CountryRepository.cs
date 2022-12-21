@@ -1,5 +1,5 @@
-﻿using Delega.Application.Exceptions;
-using Delega.Dominio.Entities;
+﻿using Delega.Dominio.Entities;
+using Delega.Dominio.Exceptions;
 using Delega.Infraestrutura.Database;
 using Delega.Infraestrutura.Repositories_Interfaces;
 using Microsoft.EntityFrameworkCore;
