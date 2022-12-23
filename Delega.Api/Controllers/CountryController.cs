@@ -45,9 +45,13 @@ public class CountryController : ControllerBase
         try
         {
             var result = await _countryService.AddCountryAsync(createDto, cancellationToken);
-            return Ok(result);
+            return StatusCode(201, result);
         }
         catch (DelegaDataException de)
+        {
+            return BadRequest(de.Message);
+        }
+        catch (DelegaDomainException de)
         {
             return BadRequest(de.Message);
         }
@@ -57,7 +61,7 @@ public class CountryController : ControllerBase
         }
     }
 
-    [HttpPut]
+    [HttpPatch]
     public async Task<IActionResult> UpdateCountryAsync([FromBody] CountryUpdateDTO updateDto)
     {
         var cancellationToken = HttpContext.RequestAborted;

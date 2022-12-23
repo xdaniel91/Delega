@@ -5,8 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-public class CustomWebApplicationFactory<TProgram>
-    : WebApplicationFactory<TProgram> where TProgram : class
+public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<Program>
 {
     private readonly IConfigurationRoot Configuration;
 

@@ -29,7 +29,7 @@ public class StateController : ControllerBase
         }
         catch (DelegaDataException de)
         {
-            return BadRequest(de.Message);
+            return NotFound(de.Message);
         }
         catch (Exception ex)
         {
@@ -45,9 +45,13 @@ public class StateController : ControllerBase
         try
         {
             var result = await _stateService.AddStateAsync(createDto, cancellationToken);
-            return Ok(result);
+            return StatusCode(201, result);
         }
         catch (DelegaDataException de)
+        {
+            return BadRequest(de.Message);
+        }
+        catch (DelegaDomainException de)
         {
             return BadRequest(de.Message);
         }
@@ -57,7 +61,7 @@ public class StateController : ControllerBase
         }
     }
 
-    [HttpPut]
+    [HttpPatch]
     public async Task<IActionResult> UpdateStateAsync([FromBody] StateUpdateDTO updateDto)
     {
         var cancellationToken = HttpContext.RequestAborted;
@@ -68,6 +72,10 @@ public class StateController : ControllerBase
             return Ok(result);
         }
         catch (DelegaDataException de)
+        {
+            return BadRequest(de.Message);
+        }
+        catch (DelegaDomainException de)
         {
             return BadRequest(de.Message);
         }

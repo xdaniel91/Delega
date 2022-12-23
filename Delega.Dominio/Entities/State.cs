@@ -40,11 +40,11 @@ public class State : EntityBase
     public async Task UpdateAsync(string? name, CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)
-            throw new OperationCanceledException("Operação cancelada");
+            throw new OperationCanceledException("Operation canceled");
 
         try
         {
-            if (name is not null)
+            if (!string.IsNullOrEmpty(name))
                 Name = name;
 
             await ValidateAsync(cancellationToken);

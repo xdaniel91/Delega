@@ -7,6 +7,6 @@ public class CountryValidator : AbstractValidator<Country>
 {
     public CountryValidator()
     {
-        RuleFor(x => x.Name).NotEmpty();
+        RuleFor(x => x.Name).NotEmpty().NotNull().WithMessage("name invalid");
     }
 }

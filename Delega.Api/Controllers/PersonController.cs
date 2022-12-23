@@ -49,7 +49,7 @@ public class PersonController : ControllerBase
         try
         {
             var result = await _personService.AddPersonAsync(createDto, cancellationToken);
-            return Ok(result);
+            return StatusCode(201, result);
         }
         catch (DelegaDataException de)
         {

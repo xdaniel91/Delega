@@ -2,6 +2,7 @@
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.DTOs.Response;
 using Delega.Infraestrutura.DTOs.Update;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
@@ -19,6 +20,7 @@ public class PersonControllerIntegragationTest : IClassFixture<WebApplicationFac
     {
         _factory = factory;
         _client = _factory.CreateClient();
+
     }
 
     [Fact]
@@ -49,22 +51,26 @@ public class PersonControllerIntegragationTest : IClassFixture<WebApplicationFac
     }
 
     [Fact]
-    public async Task POST_ShouldReturn200OKPersonInserted()
+    public async Task POST_ShouldReturn201Created()
     {
+        var cpf = TestUtils.RandomString(11);
+        var firstName = TestUtils.RandomString(5);
+        var lastName = TestUtils.RandomString(5);
+       
         //Arrange
         var personInsert = new PersonCreateDTO
         {
             AddressId = 1,
             BirthDate = DateTime.Today.AddYears(-35),
-            Cpf = "18666666666",
-            FirstName = "pingu",
-            LastName = "aluisio"
+            Cpf = cpf,
+            FirstName = firstName,
+            LastName = lastName
         };
 
         //Act
         var personJson = JsonContent.Create(personInsert);
         var response = await _client.PostAsync(baseUrl, personJson);
-        Assert.Equal(200, (int)response.StatusCode);
+        Convert.ToInt32(response.StatusCode).Should().Be(201);
     }
 
     [Theory]

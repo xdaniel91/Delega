@@ -41,7 +41,7 @@ public class Country : EntityBase
 
         try
         {
-            if (name != null)
+            if (!string.IsNullOrEmpty(name))
                 Name = name;
 
             await ValidateAsync(cancellationToken);
