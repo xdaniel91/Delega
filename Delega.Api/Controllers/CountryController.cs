@@ -29,6 +29,10 @@ public class CountryController : ControllerBase
         }
         catch (DelegaDataException de)
         {
+            return NotFound(de.Message);
+        }
+        catch (DelegaDomainException de)
+        {
             return BadRequest(de.Message);
         }
         catch (Exception ex)

@@ -8,12 +8,10 @@ public class CityValidator : AbstractValidator<City>
     public CityValidator()
     {
         RuleFor(x => x.StateId)
-            .NotEmpty().WithMessage("state id invalid");
+            .NotEmpty().GreaterThan(0).WithMessage("state id invalid");
        
         RuleFor(x => x.Name)
             .NotEmpty()
             .Length(3, 20).WithMessage("name invalid");
     }
 }
-
-

@@ -9,9 +9,11 @@ public class InvoiceValidator : AbstractValidator<Invoice>
     {
         RuleFor(x => x.Discount)
             .NotEmpty()
-            .GreaterThan(0.0).WithMessage("discount invalid");
+            .InclusiveBetween(1, 100).WithMessage("discount invalid");
 
         RuleFor(x => x.Value)
-            .NotEmpty().WithMessage("value invalid");
+            .GreaterThan(0)
+            .NotEmpty()
+            .WithMessage("value invalid");
     }
 }

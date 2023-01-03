@@ -1,5 +1,4 @@
 ﻿using Delega.Application.Repositories_Interfaces;
-using Delega.Dominio.Entities;
 using Delega.Dominio.Exceptions;
 using Delega.Infraestrutura.DTOs;
 using Delega.Infraestrutura.Repositories_Interfaces;

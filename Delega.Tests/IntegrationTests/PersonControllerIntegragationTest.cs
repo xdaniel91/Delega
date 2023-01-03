@@ -10,18 +10,11 @@ using Xunit;
 
 namespace Delega.Tests.IntegrationTests;
 
-public class PersonControllerIntegragationTest : IClassFixture<WebApplicationFactory<Program>>
+public class PersonControllerIntegragationTest : IntegrationTestBase
 {
     private const string baseUrl = @"https://localhost:7179/api/person";
-    private readonly WebApplicationFactory<Program> _factory;
-    private HttpClient _client;
 
-    public PersonControllerIntegragationTest(WebApplicationFactory<Program> factory)
-    {
-        _factory = factory;
-        _client = _factory.CreateClient();
-
-    }
+    public PersonControllerIntegragationTest(WebApplicationFactory<Program> factory) : base(factory) { }
 
     [Fact]
     public async Task GET_ShouldRetun200OK()

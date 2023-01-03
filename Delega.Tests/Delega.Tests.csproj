@@ -47,8 +47,4 @@
     <ProjectReference Include="..\Delega.Api\Delega.Api.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="EntitiesUnityTests\" />
-  </ItemGroup>
-
 </Project>

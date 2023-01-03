@@ -10,18 +10,11 @@ using Xunit;
 
 namespace Delega.Tests.IntegrationTests;
 
-public class StateControllerIntegrationTest : IClassFixture<WebApplicationFactory<Program>>
+public class StateControllerIntegrationTest : IntegrationTestBase
 {
-
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
     private const string baseUrl = $@"https://localhost:7179/api/state";
 
-    public StateControllerIntegrationTest(WebApplicationFactory<Program> factory)
-    {
-        _factory = factory;
-        _client = _factory.CreateClient();
-    }
+    public StateControllerIntegrationTest(WebApplicationFactory<Program> factory) : base(factory) { }
 
     [Fact]
     public async Task GET_ShouldReturn200OK()

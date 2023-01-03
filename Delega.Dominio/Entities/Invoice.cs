@@ -7,36 +7,28 @@ namespace Delega.Dominio.Entities;
 [NotMapped]
 public class Invoice
 {
-    public decimal Value { get; private  set; }
-    public bool HaveDiscount { get; private  set; }
-    public double Discount { get; private  set; }
+    public decimal Value { get; private set; }
+    public bool HaveDiscount { get; private set; }
+    public double Discount { get; private set; }
 
     public decimal FinalValue {
-        get 
-        {
+        get {
             if (HaveDiscount)
             {
                 double percentualDesconto = Discount / 100.0;
                 var valorFinal = Value - ((decimal)percentualDesconto * Value);
                 return valorFinal;
             }
-            
+
             return Value;
         }
     }
 
-    public Person Person { get; private set; }
-
-    public Invoice()
+    public Invoice(decimal value, bool haveDiscount, double discountPercentage)
     {
-
-    }
-
-    public Invoice(decimal valor, bool temDesconto, double percentualDesconto)
-    {
-        Value = valor;
-        Discount = percentualDesconto;
-        HaveDiscount = temDesconto;
+        Value = value;
+        Discount = discountPercentage;
+        HaveDiscount = haveDiscount;
     }
 
     private async Task<bool> ValidateAsync(Invoice invoice, CancellationToken cancellationToken)

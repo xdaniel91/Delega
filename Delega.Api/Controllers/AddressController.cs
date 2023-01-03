@@ -29,6 +29,10 @@ public class AddressController : Controller
         }
         catch (DelegaDataException de)
         {
+            return NotFound(de.Message);
+        }
+        catch (DelegaDomainException de)
+        {
             return BadRequest(de.Message);
         }
         catch (Exception ex)
@@ -45,9 +49,13 @@ public class AddressController : Controller
         try
         {
             var result = await _addressService.AddAddressAsync(createDto, cancellationToken);
-            return Ok(result);
+            return StatusCode(201, result);
         }
         catch (DelegaDataException de)
+        {
+            return BadRequest(de.Message);
+        }
+        catch (DelegaDomainException de)
         {
             return BadRequest(de.Message);
         }
