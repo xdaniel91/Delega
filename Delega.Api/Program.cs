@@ -1,44 +1,20 @@
-using Delega.Api.Database;
-using Delega.Api.Interfaces.Repositories;
-using Delega.Api.Interfaces.Services;
-using Delega.Api.Repositories.Implementation;
-using Delega.Api.Services.Implementation;
+using Delega.Infraestrutura.Database;
 using Microsoft.EntityFrameworkCore;
-using FluentMigrator.Runner;
-using Delega.Api.Migrations;
-using Delega.Api.Utils;
-using Delega.Api.Interfaces;
+using Delega.Api.Configurations;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
-var ServiceProvider = CreateServices(builder);
+builder.Services.AddDependencyInjection();
+builder.Services.AddFluentMigrator(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DelegaContext>(
-options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega")));
-
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = "localhost:6379";
-});
-
-using var scope = ServiceProvider.CreateScope();
-UpdateDatabase(scope.ServiceProvider);
-
-builder.Services.AddScoped<IConsMessages, ConstMessages>();
-builder.Services.AddScoped<IPersonRepository, PersonRepository>();
-builder.Services.AddScoped<IPersonService, PersonService>();
-
-builder.Services.AddScoped<ILawyerService, LawyerService>();
-builder.Services.AddScoped<ILawyerRepository, LawyerRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWok>();
+options => options.UseNpgsql(builder.Configuration.GetConnectionString("delega.postgres")));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -47,31 +23,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
+app.UpdateDatabase();
 app.Run();
 
-
-static void UpdateDatabase(IServiceProvider serviceProvider)
-{
-    // Instantiate the runner
-    var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
-
-    // Execute the migrations
-    runner.MigrateUp();
-}
-
-static IServiceProvider CreateServices(WebApplicationBuilder builder)
-{
-    return new ServiceCollection()
-        .AddFluentMigratorCore()
-    .ConfigureRunner(rb => rb.AddPostgres()
-    .WithGlobalConnectionString(builder.Configuration.GetConnectionString("delega"))
-    .ScanIn(typeof(AddPersonTable).Assembly).For.Migrations()
-    .ScanIn(typeof(AddLawyerTable).Assembly).For.Migrations())
-    .AddLogging(lb => lb.AddFluentMigratorConsole())
-    .BuildServiceProvider(false);
-}
+public partial class Program { }
